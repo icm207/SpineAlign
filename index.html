@@ -1,11 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>SpineAlign-Análisis de simetría postural</title>
+  <style>
+    /* aquí va lo de CSS btw */
+  </style>
+</head>
 </head>
 <body>
+  <body>
+    <header>
+      <h1>SpineAlign</h1>
+      <nav aria-label="Principal">
+        <a href="#evaluar">Nueva evaluación</a>
+        <a href="#historial">Historial</a>
+      </nav>
+    </header>
   
+    <main>
+      <section id="evaluar">
+        <h2>Nueva evaluación</h2>
+  
+        <ol aria-label="Pasos">
+          <li>Subir foto</li>
+          <li>Marcar hombros</li>
+          <li>Ver resultado</li>
+        </ol>
+  
+        <article id="visor">
+          <h3>Imagen</h3>
+          <input type="file" id="archivo" accept="image/*">
+          <canvas id="lienzo"></canvas>
+        </article>
+  
+        <article id="metricas">
+          <h3>Métricas</h3>
+          <dl>
+            <dt>Ángulo de inclinación</dt><dd id="angulo">—</dd>
+            <dt>Diferencia de altura</dt><dd id="altura">—</dd>
+            <dt>Clasificación</dt><dd id="clasif">Sin datos</dd>
+          </dl>
+          <button disabled>Descargar PDF</button>
+        </article>
+      </section>
+  
+      <section id="historial">
+        <h2>Historial</h2>
+        <p>Aquí aparecerán las evaluaciones guardadas.</p>
+      </section>
+    </main>
+  
+    <footer>
+  <p>
+    <strong>SpineAlign es una herramienta de apoyo.</strong>
+    No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+  </p>
+  <p class="copyright">© 2026 SpineAlign</p>
+</footer>
+    <script>
+      // aquí va el JavaScript
+    </script>
 </body>
 </html>

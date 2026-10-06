@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+}
+
+model Patient {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String?
+  birthDate   DateTime?
+  createdAt   DateTime     @default(now())
+  assessments Assessment[]
+}
+
+model Assessment {
+  id            String   @id @default(uuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  date          DateTime @default(now())
+  imagePath     String
+  leftShoulder  Json
+  rightShoulder Json
+  imageWidth    Int
+  imageHeight   Int
+  angleDeg      Float
+  heightDiffPx  Float
+  heightDiffPct Float
+  classification String
+}
