@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpineAlign-Análisis de simetría postural</title>
   <style>
-    /* aquí va lo de CSS btw */
+  /* Aquí va todo lo de CSS */
   </style>
-</head>
-</head>
-<body>
+<head>
   <body>
     <header>
       <h1>SpineAlign</h1>
@@ -22,17 +20,18 @@
     <main>
       <section id="evaluar">
         <h2>Nueva evaluación</h2>
-  
-        <ol aria-label="Pasos">
+        <ol>
           <li>Subir foto</li>
           <li>Marcar hombros</li>
           <li>Ver resultado</li>
         </ol>
   
-        <article id="visor">
+        <article id="visualizar">
           <h3>Imagen</h3>
-          <input type="file" id="archivo" accept="image/*">
+          <input type="file" id="archivo" accept="image/*"> 
+          <!-- Esta etiqueta(input) con su atributo(type) crean campos interactivos según el tipo de dato. -->
           <canvas id="lienzo"></canvas>
+          <!-- permite espacio gráfico usando código de Java -->
         </article>
   
         <article id="metricas">
@@ -41,26 +40,28 @@
             <dt>Ángulo de inclinación</dt><dd id="angulo">—</dd>
             <dt>Diferencia de altura</dt><dd id="altura">—</dd>
             <dt>Clasificación</dt><dd id="clasif">Sin datos</dd>
-          </dl>
+          <!-- dl = lista de descripción  dt = nombre del dato  dd = valor del dato.
+              sirven para datos de tipo "nombre: valor"-->
           <button disabled>Descargar PDF</button>
         </article>
       </section>
   
       <section id="historial">
         <h2>Historial</h2>
-        <p>Aquí aparecerán las evaluaciones guardadas.</p>
+        <p>
+         <h3>Aquí aparecerán las evaluaciones guardadas.</h3> 
+        </p>
       </section>
     </main>
-  
+    
     <footer>
   <p>
-    <strong>SpineAlign es una herramienta de apoyo.</strong>
+    <strong>
+      SpineAlign es una herramienta de apoyo.
+    </strong>
     No sustituye el diagnóstico ni la valoración de un profesional de la salud.
   </p>
   <p class="copyright">© 2026 SpineAlign</p>
-</footer>
-    <script>
-      // aquí va el JavaScript
-    </script>
+  </footer>
 </body>
 </html>
