@@ -1,0 +1,16 @@
+h1{color:rgb(67, 67, 176);
+  font-size: 50px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-style:italic;
+  font-weight: 0;
+  text-align: center;
+  border: 8px solid 
+}
+div{
+  text-align: center;
+  color: antiquewhite;
+  width:20px
+  height: 20px ;
+  background-color: rgb(67,67,176);
+  border-radius: 20px;
+}
