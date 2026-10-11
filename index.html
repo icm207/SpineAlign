@@ -1,73 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
-  <link rel="stylesheet" href="./assets/css/style.css">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpineAlign</title>
   <style>
-  /* Aquí va todo lo de CSS */
- 
+    /* Aquí va todo lo de CSS */
   </style>
 </head>
-  <body>
-    <header>
-      <img src="assets/img/iotipo.png" alt="Logotipo de la empresa" class="centrada" width="400" height="100">
-      
-      <nav aria-label="Principal">
+<link rel="stylesheet" href="./assets/css/style.css">
 
-        <div>Bienvenido a SpineAlign</div>
-        <a href="#evaluar">Nueva evaluación</a>
-        <a href="#historial">Historial</a>
-      </nav>
-    </header>
-  
-    <main>
-      
-      <section id="evaluar">
-        <h2>Nueva evaluación</h2>
-        <ol>
-          <li>Subir foto</li>
-          <li>Marcar hombros</li>
-          <li>Ver resultado</li>
-        </ol>
+<body>
+  <header class="barra-navegacion">
+    <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
 
-        <article id="visualizar">
-          <h3>Imagen</h3>
-          <input type="file" id="archivo" accept="image/*"> 
-          <!-- Esta etiqueta(input) con su atributo(type) crean campos interactivos según el tipo de dato. -->
-          <canvas id="lienzo"></canvas>
-          <!-- permite espacio gráfico usando código de Java -->
-        </article>
-  
-        <article id="metricas">
-          <h3>Métricas</h3>
-          <dl>
-            <dt>Ángulo de inclinación</dt><dd id="angulo">—</dd>
-            <dt>Diferencia de altura</dt><dd id="altura">—</dd>
-            <dt>Clasificación</dt><dd id="clasif">Sin datos</dd>
-          <!-- dl = lista de descripción  dt = nombre del dato  dd = valor del dato.
-              sirven para datos de tipo "nombre: valor"-->
-          <button disabled>Descargar PDF</button>
-        </article>
-      </section>
-  
-      <section id="historial">
-        <h2>Historial</h2>
-        <p>
-         <h3>Aquí aparecerán las evaluaciones guardadas.</h3> 
-        </p>
-      </section>
-    </main>
-    
-    <footer>
-  <p>
-    <strong>
-      SpineAlign es una herramienta de apoyo.
-    </strong>
-    No sustituye el diagnóstico ni la valoración de un profesional de la salud.
-  </p>
-  <p class="copyright">© 2026 SpineAlign</p>
+    <nav class="menu-derecha" aria-label="Principal">
+      <a href="index.html" class="mensaje-bienvenida">Bienvenido a SpineAlign</a>
+      <a href="index.html#bienvenida">¿Quiénes somos?</a>
+      <!-- Enlace que lleva al otro archivo HTML -->
+      <a href="evaluar.html">Nueva evaluación</a>
+      <a href="historial.html">Historial</a>
+      <a href="#login" class="boton-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL DEL INDEX -->
+  <main>
+    <section id="bienvenida">
+      <h2>¿Quiénes somos?</h2>
+      <p>Bienvenido a SpineAlign. Aquí puedes explicar tu proyecto de ingeniería biomédica, tu formación y objetivos.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      <strong>
+        SpineAlign es una herramienta de apoyo.
+      </strong>
+      No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+    </p>
+    <p class="copyright">© 2026 SpineAlign</p>
   </footer>
 </body>
+
 </html>

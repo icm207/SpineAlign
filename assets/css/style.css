@@ -6,6 +6,12 @@
   text-align: center;
   border: 8px solid 
 }*/
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background-color: rgb(255, 250, 243); 
+}
 .centrada {
   display: block;
   margin-left: auto;
@@ -15,9 +21,53 @@
 }
 div{
   text-align: center;
-  color: antiquewhite;
-  width:20px
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(255, 250, 243);
+  font-size: 15px;
+  width:auto;
   height: 20px ;
-  background-color: rgb(67,67,176);
-  border-radius: 20px;
+  padding: 10px 20px;
+  background-color: rgb(67,67,167);
+  border: 0.6px;
+}
+/* 1. La barra principal que empuja la imagen a la izquierda y el menú a la derecha */
+.barra-navegacion {
+  display: flex;
+  justify-content: space-between; /* Separa los extremos */
+  align-items: center;          /* Centra verticalmente logo y menú */
+  background-color: rgb(67, 67, 176); /* O el color que prefieras para tu fondo */
+  padding: 10px 30px;           /* Espacio interno para que no pegue de las orillas */
+}
+
+/* 2. Controla el tamaño de tu logo para que no quede gigante */
+.barra-navegacion .logo {
+  height: 50px;       /* Ajusta la altura a tu gusto (ej: 40px o 50px) */
+  width: auto;        /* Mantiene la proporción original de la imagen */
+}
+
+/* 3. Agrupa los elementos de la derecha uno al lado del otro */
+.menu-derecha {
+  display: flex;
+  align-items: center;
+  gap: 20px;          /* Espacio automático entre el texto de bienvenida y los enlaces */
+}
+
+/* 4. Estilo para el texto "Bienvenido a SpineAlign" (si quieres darle formato de texto plano) */
+.mensaje-bienvenida {
+  color: rgb(255, 250, 243);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 15px;
+}
+
+/* 5. Estilo para los enlaces de navegación */
+.menu-derecha a {
+  color: rgb(255, 250, 243);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-decoration: none; /* Quita el subrayado */
+  font-size: 15px;
+  transition: opacity 0.2s;
+}
+
+.menu-derecha a:hover {
+  text-decoration: underline; /* Subraya al pasar el mouse por encima */
 }

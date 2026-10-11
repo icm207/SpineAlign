@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SpineAlign - Nueva Evaluación</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN (Se repite para mantener el diseño) -->
+  <header class="barra-navegacion">
+    <img src="assets/img/iotipo.png" alt="Isotipo SpineAlign" class="logo">
+    
+    <nav class="menu-derecha" aria-label="Principal">
+      <!-- Los enlaces apuntan de regreso al index o a las páginas correctas -->
+
+      <a href="historial.html">Historial</a>
+      <a href="#login" class="boton-login">Iniciar sesión</a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO EXCLUSIVO DE EVALUACIÓN -->
+  <main>
+    <section id="evaluar">
+      <h2>Nueva evaluación</h2>
+      <ol>
+        <li>Subir foto</li>
+        <li>Marcar hombros</li>
+        <li>Ver resultado</li>
+      </ol>
+
+      <article id="visualizar">
+        <h3>Imagen</h3>
+        <input type="file" id="archivo" accept="image/*"> 
+        <canvas id="lienzo"></canvas>
+      </article>
+
+      <article id="metricas">
+        <h3>Métricas</h3>
+        <dl>
+          <dt>Ángulo de inclinación</dt><dd id="angulo">—</dd>
+          <dt>Diferencia de altura</dt><dd id="altura">—</dd>
+          <dt>Clasificación</dt><dd id="clasif">Sin datos</dd>
+        </dl>
+        
+        <button disabled>Descargar PDF</button>
+      </article>
+    </section>
+  </main>
+<footer>
+   <p>
+      <strong>
+        SpineAlign es una herramienta de apoyo.
+      </strong>
+      No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+    </p>
+    <p class="copyright">© 2026 SpineAlign</p>
+</footer>
+</body>
+
+</html>
