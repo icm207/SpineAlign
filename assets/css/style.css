@@ -71,3 +71,62 @@ div{
 .menu-derecha a:hover {
   text-decoration: underline; /* Subraya al pasar el mouse por encima */
 }
+/* Contenedor principal de la sección */
+.spine-funcionamiento {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Inter', sans-serif;
+  color: #f8fafc;
+}
+
+/* Cabecera de la sección */
+.spine-funcionamiento-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.spine-funcionamiento-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #f8fafc;
+}
+
+.spine-funcionamiento-header p {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+/* Cuadrícula para organizar los pasos en tarjetas */
+.spine-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* Estilo individual de cada tarjeta de paso */
+.spine-step-card {
+  background-color: #0f172a; /* Fondo oscuro acorde a tu diseño */
+  border: 1px solid #1e293b; /* Borde sutil */
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.spine-step-card span {
+  font-size: 14px;
+  font-weight: 700;
+  color: #38bdf8; /* Azul claro estilo Tailwind */
+  margin-bottom: 8px;
+  display: block;
+}
+
+.spine-step-card p {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0;
+}
