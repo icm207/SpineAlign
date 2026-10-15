@@ -6,127 +6,169 @@
   text-align: center;
   border: 8px solid 
 }*/
+/* ===== Base y modelo de caja ===== */
+*, *::before, *::after {
+  box-sizing: border-box;   /* width incluye padding y borde */
+}
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
-  background-color: rgb(255, 250, 243); 
+  margin: 0;                /* quita los 8px por defecto */
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1rem;          /* 16px */
+  line-height: 1.6;
+  background-color: rgb(255, 250, 243);
+  color: #1e293b;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 0;                /* quita el margen por defecto de figure */
+}
+
 .centrada {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  max-width: 100%;
-  height: auto;
 }
-div{
-  text-align: center;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: rgb(255, 250, 243);
-  font-size: 15px;
-  width:auto;
-  height: 20px ;
-  padding: 10px 20px;
-  background-color: rgb(67,67,167);
-  border: 0.6px;
-}
-/* 1. La barra principal que empuja la imagen a la izquierda y el menú a la derecha */
+
+/* ===== Barra de navegación ===== */
 .barra-navegacion {
   display: flex;
-  justify-content: space-between; /* Separa los extremos */
-  align-items: center;          /* Centra verticalmente logo y menú */
-  background-color: rgb(67, 67, 176); /* O el color que prefieras para tu fondo */
-  padding: 10px 30px;           /* Espacio interno para que no pegue de las orillas */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.75rem 2rem;
+  background-color: rgb(67, 67, 176);
 }
 
-/* 2. Controla el tamaño de tu logo para que no quede gigante */
 .barra-navegacion .logo {
-  height: 50px;       /* Ajusta la altura a tu gusto (ej: 40px o 50px) */
-  width: auto;        /* Mantiene la proporción original de la imagen */
+  height: 50px;
+  width: auto;
 }
 
-/* 3. Agrupa los elementos de la derecha uno al lado del otro */
 .menu-derecha {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 20px;          /* Espacio automático entre el texto de bienvenida y los enlaces */
+  gap: 1.25rem;
 }
 
-/* 4. Estilo para el texto "Bienvenido a SpineAlign" (si quieres darle formato de texto plano) */
-.mensaje-bienvenida {
-  color: rgb(255, 250, 243);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 15px;
-}
-
-/* 5. Estilo para los enlaces de navegación */
+.mensaje-bienvenida,
 .menu-derecha a {
   color: rgb(255, 250, 243);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  text-decoration: none; /* Quita el subrayado */
-  font-size: 15px;
-  transition: opacity 0.2s;
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.25rem 0.5rem;  /* área de clic más cómoda */
 }
 
 .menu-derecha a:hover {
-  text-decoration: underline; /* Subraya al pasar el mouse por encima */
+  text-decoration: underline;
 }
-/* Contenedor principal de la sección */
+
+.menu-derecha .boton-login {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(255, 250, 243);
+  border-radius: 6px;
+}
+
+.menu-derecha .boton-login:hover {
+  background-color: rgba(255, 250, 243, 0.15);
+  text-decoration: none;
+}
+
+/* ===== Contenido principal ===== */
+.contenedor {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+
+.contenedor h2 {
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.contenedor p {
+  max-width: 65ch;          /* línea cómoda de leer */
+  margin: 0 auto 1.5rem;
+}
+
+/* ===== Sección "Cómo funciona" ===== */
 .spine-funcionamiento {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: 'Inter', sans-serif;
+  margin: 3rem auto;
+  padding: 2rem 1rem;
+  background-color: #0f172a;
+  border-radius: 12px;
   color: #f8fafc;
 }
 
-/* Cabecera de la sección */
 .spine-funcionamiento-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
 }
 
 .spine-funcionamiento-header h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 8px;
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
   color: #f8fafc;
 }
 
 .spine-funcionamiento-header p {
-  font-size: 13px;
+  margin: 0;
+  font-size: 0.95rem;
   color: #94a3b8;
 }
 
-/* Cuadrícula para organizar los pasos en tarjetas */
+/* ol con lista de tarjetas: se quitan números y sangría por defecto */
 .spine-steps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* Estilo individual de cada tarjeta de paso */
 .spine-step-card {
-  background-color: #0f172a; /* Fondo oscuro acorde a tu diseño */
-  border: 1px solid #1e293b; /* Borde sutil */
+  padding: 1.5rem;
+  background-color: #1e293b;
+  border: 1px solid #334155;
   border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
-.spine-step-card span {
-  font-size: 14px;
-  font-weight: 700;
-  color: #38bdf8; /* Azul claro estilo Tailwind */
-  margin-bottom: 8px;
-  display: block;
+.spine-step-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #38bdf8;
 }
 
 .spine-step-card p {
-  font-size: 12px;
-  color: #94a3b8;
-  line-height: 1.5;
   margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+/* ===== Footer ===== */
+footer {
+  margin-top: 3rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  background-color: rgb(67, 67, 176);
+  color: rgb(255, 250, 243);
+}
+
+footer p {
+  margin: 0.5rem 0;
 }
