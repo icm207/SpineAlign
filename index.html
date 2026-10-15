@@ -5,11 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpineAlign</title>
-  <style>
-    /* Aquí va todo lo de CSS */
-  </style>
+  <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<link rel="stylesheet" href="./assets/css/style.css">
 
 <body>
   <header class="barra-navegacion">
@@ -26,20 +23,38 @@
 
   <!-- CONTENIDO PRINCIPAL DEL INDEX -->
   <main>
-    <section id="bienvenida">
+    <section id="bienvenida" class="contenedor">
       <h2>¿Quiénes somos?</h2>
       <p>Bienvenido a SpineAlign. SpineAlign es un sitio web interactivo e iniciativa biomédica enfocada en la salud y la prevención postural de manera accesible e intuitiva. Mediante la integración de la cámara del dispositivo, la plataforma aplica un método de evaluación postural basado en fotogrametría computarizada, analizando puntos anatómicos clave en tiempo real. A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), Spine Align permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales. Su propósito no es reemplazar el diagnóstico médico profesional, sino servir como un punto de orientación preventiva para que los usuarios reconozcan su estado postural y, de ser necesario, acudan a una consulta con un especialista de la salud.
       </p>
-      <article>
-              <img src="assets/img/postura.png" alt="Persona posando de espaldas">
-
-      </article>
-      <article>
-        <h2>¿Cómo funciona SpineAlign</h2>
-      </article>
+      <figure>
+        <img src="assets/img/postura.png" alt="Persona posando de espaldas" class="centrada">
+      </figure> <!---- Es un contenedor para una imagen -->
+      </section>
+      <section id="como-funciona" class="spine-funcionamiento"> <!-- id = nombre único | class = estilo reutilizable | van juntos en la misma etiqueta -->
+        <header class="spine-funcionamiento-header">
+          <h2>¿Cómo funciona SpineAlign?</h2>
+          <p>Tres pasos para conocer tu postura</p>
+        </header>
+      >
+        <ol class="spine-steps-grid">
+          <li class="spine-step-card">
+            <h3>Paso 1</h3>
+            <p>Activa la cámara de tu dispositivo.</p>
+          </li>
+          <li class="spine-step-card">
+            <h3>Paso 2</h3>
+            <p>Colócate de espaldas y toma la captura.</p>
+          </li>
+          <li class="spine-step-card">
+            <h3>Paso 3</h3>
+            <p>Revisa tu Ángulo Bi-Acromial y tu índice ASI.</p>
+          </li>
+        </ol>
+      </section>
     </section>
-    <section id="contacto"> 
-
+    <section id="contacto" class="contenedor">
+      <h2>Contacto</h2>
     </section>
   </main>
 
