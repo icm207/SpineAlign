@@ -1,0 +1,265 @@
+/* ==========================================
+   1. ESTILOS GENERALES Y VARIABLES
+   ========================================== */
+:root {
+    --color-principal: rgb(67, 67, 176);
+    --color-principal-hover: rgb(52, 52, 140);
+    --color-fondo: rgb(255, 250, 243);
+    --color-texto: #2d3748;
+    --color-texto-suave: #718096;
+    --color-blanco: #ffffff;
+    --color-borde: #e2e8f0;
+    --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --sombra-media: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   2. BARRA DE NAVEGACIÓN
+   ========================================== */
+.barra-navegacion {
+    background-color: var(--color-blanco);
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+.menu-derecha {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu-derecha a {
+    text-decoration: none;
+    color: var(--color-texto);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.menu-derecha a:hover {
+    color: var(--color-principal);
+}
+
+.boton-login {
+    background-color: transparent;
+    border: 2px solid var(--color-principal);
+    color: var(--color-principal) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.boton-login:hover {
+    background-color: var(--color-principal);
+    color: var(--color-blanco) !important;
+}
+
+/* ==========================================
+   3. CONTENIDO PRINCIPAL Y SECCIÓN EVALUAR
+   ========================================== */
+main {
+    flex: 1;
+    max-width: 1100px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+#evaluar {
+    background-color: var(--color-blanco);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--sombra-media);
+}
+
+#evaluar h2 {
+    color: var(--color-principal);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+/* Pasos numerados */
+#evaluar ol {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    counter-reset: paso;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+#evaluar ol li {
+    counter-increment: paso;
+    font-weight: 600;
+    color: var(--color-texto-suave);
+    font-size: 0.95rem;
+}
+
+#evaluar ol li::before {
+    content: counter(paso);
+    background-color: var(--color-fondo);
+    color: var(--color-principal);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-principal);
+}
+
+/* Grid para visualizar y métricas */
+#evaluar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    #evaluar {
+        grid-template-columns: 1.2fr 1fr;
+        grid-template-areas: 
+            "titulo titulo"
+            "pasos pasos"
+            "visualizar metricas";
+    }
+    #evaluar h2 { grid-area: titulo; }
+    #evaluar ol { grid-area: pasos; }
+    #visualizar { grid-area: visualizar; }
+    #metricas { grid-area: metricas; }
+}
+
+/* Artículos (Visualización y Métricas) */
+article {
+    background-color: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+article h3 {
+    font-size: 1.1rem;
+    color: var(--color-texto);
+    margin-bottom: 1rem;
+}
+
+/* Input de archivo estilizado */
+input[type="file"] {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-blanco);
+    border: 1px dashed var(--color-principal);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+#lienzo {
+    width: 100%;
+    height: 220px;
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    display: block;
+}
+
+/* Estilo de la lista de métricas (dl, dt, dd) */
+#metricas dl {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+#metricas dt {
+    color: var(--color-texto-suave);
+}
+
+#metricas dd {
+    font-weight: 600;
+    color: var(--color-texto);
+    text-align: right;
+}
+
+/* Botón de Descargar PDF */
+button {
+    width: 100%;
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    border: none;
+    padding: 0.85rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+    background-color: var(--color-principal-hover);
+}
+
+button:disabled {
+    background-color: var(--color-borde);
+    color: var(--color-texto-suave);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* ==========================================
+   4. PIE DE PÁGINA (FOOTER)
+   ========================================== */
+footer {
+    background-color: var(--color-blanco);
+    border-top: 1px solid var(--color-borde);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+    margin-top: auto;
+}
+
+footer p {
+    margin-bottom: 0.3rem;
+}
+
+footer strong {
+    color: var(--color-texto);
+}
+
+.copyright {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
