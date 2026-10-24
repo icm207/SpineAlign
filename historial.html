@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpineAlign - Historial de Evaluaciones</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+  <!-- BARRA DE NAVEGACIÓN -->
+  <header class="barra-navegacion">
+    <a href="index.html">
+      <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
+    </a>
+
+    <nav class="menu-derecha" aria-label="Principal">
+      <a href="index.html">Inicio</a>
+      <a href="evaluar.html">Nueva evaluación</a>
+      <a href="historial.html" style="text-decoration: underline;">Historial</a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL: HISTORIAL -->
+  <main class="contenedor-historial">
+    <section class="contenedor contenedor-ancho">
+      <h2>Historial de evaluaciones posturales</h2>
+      <p>Consulta el registro previo de tus análisis de fotogrametría y evolución del Índice de Asimetría Postural.</p>
+
+      <!-- Tabla de historial moderna y adaptable -->
+      <div class="tabla-contenedor">
+        <table class="tabla-historial">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Paciente / Usuario</th>
+              <th>Ángulo Bi-acromial</th>
+              <th>Índice de Asimetría</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>24/10/2026</td>
+              <td>Hostin Muñoz</td>
+              <td>1.2° (Leve desviación)</td>
+              <td>3.4%</td>
+              <td><span class="badge warning">Revisión sugerida</span></td>
+              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
+            </tr>
+            <tr>
+              <td>15/09/2026</td>
+              <td>Hostin Muñoz</td>
+              <td>0.4° (Simétrico)</td>
+              <td>1.1%</td>
+              <td><span class="badge success">Normal</span></td>
+              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
+            </tr>
+            <tr>
+              <td>02/08/2026</td>
+              <td>Hostin Muñoz</td>
+              <td>2.1° (Moderada)</td>
+              <td>5.8%</td>
+              <td><span class="badge danger">Atención requerida</span></td>
+              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="acciones-historial">
+        <a href="evaluar.html" class="boton-principal" style="max-width: 280px; display: inline-block; text-align: center; text-decoration: none;">Realizar nueva evaluación</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      SpineAlign es una herramienta de apoyo. No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+    </p>
+    <p class="copyright">Copyright © 2026 SpineAlign - Todos los derechos reservados</p>
+  </footer>
+</body>
+
+</html>

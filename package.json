@@ -1,0 +1,26 @@
+{
+  "name": "proyecto-finaljc",
+  "version": "1.0.0",
+  "description": "Plataforma web biomédica para analizar la simetría postural de los hombros a partir de una fotografía.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icm207/proyecto-finalJC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/icm207/proyecto-finalJC/issues"
+  },
+  "homepage": "https://github.com/icm207/proyecto-finalJC#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4"
+  }
+}
