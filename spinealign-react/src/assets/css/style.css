@@ -289,3 +289,69 @@ footer strong {
   margin-top: 0.5rem;
   color: #1e6cd9;
 }
+/* Estilos para que el formulario de contacto por fin tome diseño */
+.form-contacto-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 35rem;
+  margin: 2rem auto 0 auto;
+  text-align: left;
+}
+
+.grupo-form-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.grupo-form-contacto label {
+  font-weight: 600;
+  color: var(--medical-900);
+  font-size: 0.9rem;
+}
+
+.grupo-form-contacto input,
+.grupo-form-contacto textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--slate-200);
+  border-radius: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: var(--slate-800);
+  background-color: var(--slate-50);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.grupo-form-contacto input:focus,
+.grupo-form-contacto textarea:focus {
+  outline: none;
+  border-color: var(--medical-500);
+  box-shadow: 0 0 0 3px rgba(90, 90, 200, 0.15);
+  background-color: #ffffff;
+}
+
+.grupo-form-contacto textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-enviar-form {
+  background-color: var(--medical-600);
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  align-self: flex-start;
+}
+
+.btn-enviar-form:hover {
+  background-color: var(--medical-700);
+  transform: translateY(-1px);
+}
+
