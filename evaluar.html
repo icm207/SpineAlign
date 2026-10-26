@@ -2,60 +2,569 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SpineAlign - Nueva Evaluación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpineAlign - Evaluación Postural Interactiva</title>
   <link rel="stylesheet" href="assets/css/styleevaluar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos adicionales para las líneas de referencia ideal y el reporte PDF */
+    .linea-referencia-ideal {
+      stroke: #94a3b8;
+      stroke-width: 1.5;
+      stroke-dasharray: 4,4;
+    }
+
+    /* ESTILOS EXCLUSIVOS PARA IMPRESIÓN DE REPORTE PDF PROFESIONAL */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        font-family: 'Inter', sans-serif;
+      }
+      header.barra-navegacion,
+      .panel-izquierdo .tarjeta-modulo:first-child,
+      #btn-descargar-pdf,
+      footer {
+        display: none !important; /* Ocultar menús, controles de cámara y botones al imprimir */
+      }
+      main.evaluacion-layout {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .panel-izquierdo {
+        width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+      .panel-derecho {
+        display: block !important;
+        page-break-inside: avoid;
+        margin-top: 2rem;
+      }
+      .visor-interactivo {
+        border: 1px solid #cbd5e1 !important;
+        background: #fff !important;
+        max-height: 450px !important;
+      }
+      .tarjeta-modulo {
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: none !important;
+        margin-bottom: 1rem;
+      }
+      /* Encabezado formal para el PDF */
+      .reporte-header-pdf {
+        display: block !important;
+        text-align: left;
+        border-bottom: 2px solid rgb(67, 67, 176);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+      }
+      .reporte-header-pdf h1 {
+        font-size: 1.5rem;
+        color: rgb(67, 67, 176);
+        margin: 0;
+      }
+      .reporte-header-pdf p {
+        margin: 0.2rem 0 0 0;
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+    }
+
+    /* Ocultar el encabezado formal en la vista web normal */
+    .reporte-header-pdf {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- BARRA DE NAVEGACIÓN (Se repite para mantener el diseño) -->
+  <!-- BARRA DE NAVEGACIÓN -->
   <header class="barra-navegacion">
-    <img src="assets/img/iotipo.png" alt="Isotipo SpineAlign" class="logo">
+    <a href="index.html">
+      <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
+    </a>
     
     <nav class="menu-derecha" aria-label="Principal">
-      <!-- Los enlaces apuntan de regreso al index o a las páginas correctas -->
-
+      <a href="index.html">Inicio</a>
       <a href="historial.html">Historial</a>
-      <a href="#login" class="boton-login">Iniciar sesión</a>
+      <a href="login.html" class="boton-login" id="nav-login-btn">Iniciar sesión</a>
     </nav>
   </header>
 
-  <!-- CONTENIDO EXCLUSIVO DE EVALUACIÓN -->
-  <main>
-    <section id="evaluar">
-      <h2>Nueva evaluación</h2>
-      <ol>
-        <li>Subir foto</li>
-        <li>Marcar hombros</li>
-        <li>Ver resultado</li>
-      </ol>
+  <!-- CONTENIDO PRINCIPAL: DOS COLUMNAS -->
+  <main class="evaluacion-layout">
+    
+    <!-- PANEL IZQUIERDO: DATOS Y MÉTRICAS BIOMECÁNICAS -->
+    <section class="panel-izquierdo">
+      
+      <!-- Encabezado exclusivo para el PDF impreso -->
+      <div class="reporte-header-pdf">
+        <h1>SpineAlign - Reporte Clínico Postural</h1>
+        <p>Sistema de Análisis Biomecánico Computarizado</p>
+      </div>
 
-      <article id="visualizar">
-        <h3>Imagen</h3>
-        <input type="file" id="archivo" accept="image/*"> 
-        <canvas id="lienzo"></canvas>
-      </article>
-
-      <article id="metricas">
-        <h3>Métricas</h3>
-        <dl>
-          <dt>Ángulo de inclinación</dt><dd id="angulo">—</dd>
-          <dt>Diferencia de altura</dt><dd id="altura">—</dd>
-          <dt>Clasificación</dt><dd id="clasif">Sin datos</dd>
-        </dl>
+      <div class="tarjeta-modulo">
+        <h2>Nueva Evaluación</h2>
+        <p class="subtitulo-seccion">Usa la cámara o sube una foto, luego arrastra libremente C7, el Manubrium y los hombros.</p>
         
-        <button disabled>Descargar PDF</button>
-      </article>
-    </section>
-  </main>
-<footer>
-   <p>
-      <strong>
-        SpineAlign es una herramienta de apoyo.
-      </strong>
-      No sustituye el diagnóstico ni la valoración de un profesional de la salud.
-    </p>
-    <p class="copyright">© 2026 SpineAlign</p>
-</footer>
-</body>
+        <!-- Controles de captura o carga -->
+        <div class="controles-fuente" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div id="grupo-botones-inicial" style="display: flex; gap: 0.5rem;">
+            <button type="button" id="btn-activar-camara" class="btn-cargar-foto" style="flex: 1;"><i class="fa-solid fa-camera"></i> Activar Cámara</button>
+            <label for="archivo" class="btn-cargar-foto" id="label-subir" style="flex: 1; background-color: #ffffff; color: var(--medical-600); border: 1px solid var(--medical-600); text-align: center; line-height: 2.4rem; cursor: pointer;">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Subir Archivo
+            </label>
+            <input type="file" id="archivo" accept="image/*" style="display: none;">
+          </div>
 
+          <div id="grupo-botones-camara" style="display: none;">
+            <button type="button" id="btn-capturar-foto" class="btn-cargar-foto" style="width: 100%; background-color: #059669;"><i class="fa-solid fa-circle-dot"></i> Capturar Foto</button>
+          </div>
+
+          <div id="grupo-botones-revision" style="display: none; gap: 0.5rem;">
+            <button type="button" id="btn-usar-foto" class="btn-cargar-foto" style="flex: 1; background-color: #059669;"><i class="fa-solid fa-check"></i> Usar Foto</button>
+            <button type="button" id="btn-repetir-camara" class="btn-cargar-foto" style="flex: 1; background-color: #dc2626;"><i class="fa-solid fa-rotate-right"></i> Repetir Foto</button>
+          </div>
+
+          <div id="grupo-botones-reset" style="display: none;">
+            <button type="button" id="btn-reset-general" class="btn-cargar-foto" style="width: 100%; background-color: #dc2626;"><i class="fa-solid fa-rotate-right"></i> Cambiar / Repetir Foto</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Datos Fisiológicos -->
+      <div class="tarjeta-modulo">
+        <h3>Datos Fisiológicos del Paciente</h3>
+        <div class="campo-datos">
+          <label>Nombre</label>
+          <input type="text" id="input-nombre" value="Paciente General">
+        </div>
+        <div class="campo-datos" style="margin-top: 0.75rem;">
+          <label>ID / H. Clínica</label>
+          <input type="text" id="input-id" value="PX-2026-01">
+        </div>
+      </div>
+
+      <!-- Métricas Biomecánicas -->
+      <div class="tarjeta-modulo">
+        <div class="metricas-header">
+          <h3>Métricas Biomecánicas</h3>
+          <span id="badge-estado" class="badge-normal">Esperando imagen</span>
+        </div>
+
+        <div class="metricas-grid">
+          <div class="caja-metrica">
+            <span class="metrica-titulo">Inclinación Bi-Acromial</span>
+            <span id="val-angulo" class="metrica-valor">0.0°</span>
+            <span class="metrica-desc">Margen fisiológico &lt; 2.0°</span>
+          </div>
+          <div class="caja-metrica">
+            <span class="metrica-titulo">Desnivel Vertical</span>
+            <span id="val-desnivel" class="metrica-valor">0.0 <small>mm</small></span>
+            <span class="metrica-desc">Calibración: 1px = 0.85mm</span>
+          </div>
+        </div>
+
+        <div class="asi-container" style="margin-top: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem;">
+            <span style="color: var(--slate-600); font-weight: 500;">Índice de Asimetría Postural (ASI)</span>
+            <span id="val-asi" style="font-weight: 700; color: var(--medical-900);">0.0%</span>
+          </div>
+          <div class="barra-asi-fondo">
+            <div id="barra-asi-progreso" class="barra-asi-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <button id="btn-descargar-pdf" class="btn-pdf" disabled>
+          <i class="fa-solid fa-file-pdf"></i> Generar Reporte PDF
+        </button>
+      </div>
+    </section>
+
+    <!-- PANEL DERECHO: VISOR INTERACTIVO -->
+    <section class="panel-derecho">
+      <div id="contenedor-visor" class="visor-interactivo">
+        <!-- Placeholder inicial -->
+        <div id="placeholder-visor" class="placeholder-visor">
+          <i class="fa-solid fa-camera-retro"></i>
+          <p>Activa la cámara o sube una fotografía para iniciar el análisis interactivo</p>
+        </div>
+
+        <!-- Video en vivo para la cámara -->
+        <video id="webcam-video" autoplay playsinline style="display: none; max-width: 100%; max-height: 600px; object-fit: contain;"></video>
+
+        <!-- Imagen cargada o capturada -->
+        <img id="imagen-analisis" alt="Evaluación Postural" style="display: none;">
+
+        <!-- SVG para líneas de referencia ideales y conexiones reales -->
+        <svg id="svg-conexion" class="svg-linea" style="display: none;">
+          <!-- Líneas de referencia ideales (plomada vertical y horizontal estática de contraste) -->
+          <line id="ref-vertical-ideal" x1="0" y1="0" x2="0" y2="0" class="linea-referencia-ideal" />
+          <line id="ref-horizontal-ideal" x1="0" y1="0" x2="0" y2="0" class="linea-referencia-ideal" />
+
+          <!-- Líneas de medición real -->
+          <line id="linea-hombros" x1="0" y1="0" x2="0" y2="0" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,6" />
+          <line id="linea-eje-vertical" x1="0" y1="0" x2="0" y2="0" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,6" />
+        </svg>
+
+        <!-- Marcador C7 Vértebra -->
+        <div id="punto-c7" class="punto-control" style="display: none;" title="Arrastra C7 Vértebra">
+          <span class="etiqueta-punto">C7 Vértebra</span>
+        </div>
+
+        <!-- Marcador Manubrium -->
+        <div id="punto-manubrio" class="punto-control" style="display: none; background-color: #a855f7;" title="Arrastra Manubrium">
+          <span class="etiqueta-punto">Manubrium</span>
+        </div>
+
+        <!-- Marcadores de Hombros -->
+        <div id="punto-lacromion" class="punto-control" style="display: none;" title="Arrastra L-Acromion">
+          <span class="etiqueta-punto">L-Acromion</span>
+        </div>
+        <div id="punto-racromion" class="punto-control" style="display: none;" title="Arrastra R-Acromion">
+          <span class="etiqueta-punto">R-Acromion</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      <strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+    </p>
+    <p class="copyright">© 2026 SpineAlign - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- SCRIPT DE FUNCIONALIDAD -->
+  <script>
+    const btnActivarCamara = document.getElementById('btn-activar-camara');
+    const btnCapturarFoto = document.getElementById('btn-capturar-foto');
+    const btnUsarFoto = document.getElementById('btn-usar-foto');
+    const btnRepetirCamara = document.getElementById('btn-repetir-camara');
+    const btnResetGeneral = document.getElementById('btn-reset-general');
+    const inputArchivo = document.getElementById('archivo');
+
+    const grupoInicial = document.getElementById('grupo-botones-inicial');
+    const grupoCamara = document.getElementById('grupo-botones-camara');
+    const grupoRevision = document.getElementById('grupo-botones-revision');
+    const grupoReset = document.getElementById('grupo-botones-reset');
+
+    const videoWebcam = document.getElementById('webcam-video');
+    const imagenAnalisis = document.getElementById('imagen-analisis');
+    const placeholderVisor = document.getElementById('placeholder-visor');
+    const contenedorVisor = document.getElementById('contenedor-visor');
+    
+    const puntoC7 = document.getElementById('punto-c7');
+    const puntoManubrio = document.getElementById('punto-manubrio');
+    const puntoLA = document.getElementById('punto-lacromion');
+    const puntoRA = document.getElementById('punto-racromion');
+    const svgConexion = document.getElementById('svg-conexion');
+    
+    const lineaHombros = document.getElementById('linea-hombros');
+    const lineaEjeVertical = document.getElementById('linea-eje-vertical');
+    const refVerticalIdeal = document.getElementById('ref-vertical-ideal');
+    const refHorizontalIdeal = document.getElementById('ref-horizontal-ideal');
+
+    const btnPdf = document.getElementById('btn-descargar-pdf');
+    const navLoginBtn = document.getElementById('nav-login-btn');
+
+    let streamCamara = null;
+    let imagenCargada = false;
+    let canvasTemporalFoto = null;
+
+    // Verificar sesión al cargar
+    window.addEventListener('DOMContentLoaded', () => {
+      const sesionActiva = localStorage.getItem('token');
+      if (sesionActiva) {
+        navLoginBtn.textContent = "Mi Cuenta";
+        navLoginBtn.href = "#";
+      }
+    });
+
+    // Lógica del botón PDF con validación de sesión
+    btnPdf.addEventListener('click', () => {
+      const sesionActiva = localStorage.getItem('token');
+      
+      if (!sesionActiva) {
+        alert("Debe iniciar sesión para generar y descargar el reporte clínico en PDF.");
+        window.location.href = 'login.html';
+      } else {
+        window.print(); // Activa el formato de reporte optimizado por @media print
+      }
+    });
+
+    // 1. Activar Cámara
+    btnActivarCamara.addEventListener('click', async () => {
+      try {
+        streamCamara = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        videoWebcam.srcObject = streamCamara;
+        videoWebcam.style.display = 'block';
+        imagenAnalisis.style.display = 'none';
+        placeholderVisor.style.display = 'none';
+
+        grupoInicial.style.display = 'none';
+        grupoCamara.style.display = 'block';
+        grupoRevision.style.display = 'none';
+        grupoReset.style.display = 'none';
+
+        ocultarPuntosInteractivos();
+      } catch (err) {
+        alert("No se pudo acceder a la cámara.");
+      }
+    });
+
+    // 2. Capturar Foto
+    btnCapturarFoto.addEventListener('click', () => {
+      if (!streamCamara) return;
+
+      canvasTemporalFoto = document.createElement('canvas');
+      canvasTemporalFoto.width = videoWebcam.videoWidth || 640;
+      canvasTemporalFoto.height = videoWebcam.videoHeight || 480;
+      const ctxTemp = canvasTemporalFoto.getContext('2d');
+      ctxTemp.drawImage(videoWebcam, 0, 0, canvasTemporalFoto.width, canvasTemporalFoto.height);
+
+      streamCamara.getTracks().forEach(track => track.stop());
+      streamCamara = null;
+
+      imagenAnalisis.src = canvasTemporalFoto.toDataURL('image/png');
+      videoWebcam.style.display = 'none';
+      imagenAnalisis.style.display = 'block';
+
+      grupoCamara.style.display = 'none';
+      grupoRevision.style.display = 'flex';
+    });
+
+    btnUsarFoto.addEventListener('click', () => {
+      grupoRevision.style.display = 'none';
+      grupoReset.style.display = 'block';
+      imagenCargada = true;
+      inicializarPosicionesPuntos();
+    });
+
+    btnRepetirCamara.addEventListener('click', async () => {
+      try {
+        streamCamara = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        videoWebcam.srcObject = streamCamara;
+        videoWebcam.style.display = 'block';
+        imagenAnalisis.style.display = 'none';
+        grupoRevision.style.display = 'none';
+        grupoCamara.style.display = 'block';
+      } catch (err) {
+        alert("No se pudo reiniciar la cámara.");
+      }
+    });
+
+    // 3. Subir Archivo
+    inputArchivo.addEventListener('change', (e) => {
+      const archivo = e.target.files[0];
+      if (!archivo) return;
+
+      if (streamCamara) {
+        streamCamara.getTracks().forEach(track => track.stop());
+        streamCamara = null;
+      }
+
+      const lector = new FileReader();
+      lector.onload = function(event) {
+        imagenAnalisis.src = event.target.result;
+        videoWebcam.style.display = 'none';
+        imagenAnalisis.style.display = 'block';
+        placeholderVisor.style.display = 'none';
+
+        grupoInicial.style.display = 'none';
+        grupoCamara.style.display = 'none';
+        grupoRevision.style.display = 'none';
+        grupoReset.style.display = 'block';
+
+        imagenCargada = true;
+        inicializarPosicionesPuntos();
+      }
+      lector.readAsDataURL(archivo);
+    });
+
+    btnResetGeneral.addEventListener('click', () => {
+      if (streamCamara) {
+        streamCamara.getTracks().forEach(track => track.stop());
+        streamCamara = null;
+      }
+
+      imagenAnalisis.style.display = 'none';
+      videoWebcam.style.display = 'none';
+      placeholderVisor.style.display = 'block';
+
+      grupoReset.style.display = 'none';
+      grupoInicial.style.display = 'flex';
+      inputArchivo.value = '';
+
+      ocultarPuntosInteractivos();
+      reiniciarMetricas();
+    });
+
+    function ocultarPuntosInteractivos() {
+      imagenCargada = false;
+      puntoC7.style.display = 'none';
+      puntoManubrio.style.display = 'none';
+      puntoLA.style.display = 'none';
+      puntoRA.style.display = 'none';
+      svgConexion.style.display = 'none';
+    }
+
+    function reiniciarMetricas() {
+      document.getElementById('val-angulo').textContent = "0.0°";
+      document.getElementById('val-desnivel').textContent = "0.0 mm";
+      document.getElementById('val-asi').textContent = "0.0%";
+      document.getElementById('barra-asi-progreso').style.width = "0%";
+      document.getElementById('badge-estado').textContent = "Esperando imagen";
+      document.getElementById('badge-estado').className = "badge-normal";
+      btnPdf.setAttribute('disabled', 'true');
+      btnPdf.style.backgroundColor = "var(--slate-200)";
+      btnPdf.style.cursor = "not-allowed";
+    }
+
+    function inicializarPosicionesPuntos() {
+      const rect = contenedorVisor.getBoundingClientRect();
+      const w = rect.width > 0 ? rect.width : 600;
+      const h = rect.height > 0 ? rect.height : 600;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      posicionarElemento(puntoC7, cx, cy - 60);
+      posicionarElemento(puntoManubrio, cx, cy + 60);
+      posicionarElemento(puntoLA, cx - 100, cy + 10);
+      posicionarElemento(puntoRA, cx + 100, cy + 10);
+
+      puntoC7.style.display = 'flex';
+      puntoManubrio.style.display = 'flex';
+      puntoLA.style.display = 'flex';
+      puntoRA.style.display = 'flex';
+      svgConexion.style.display = 'block';
+
+      btnPdf.removeAttribute('disabled');
+      btnPdf.style.backgroundColor = 'var(--medical-600)';
+      btnPdf.style.cursor = 'pointer';
+
+      actualizarCalculosBiomecanicos();
+    }
+
+    function posicionarElemento(el, x, y) {
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+    }
+
+    function obtenerCentro(el) {
+      const parentRect = contenedorVisor.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left - parentRect.left + rect.width / 2,
+        y: rect.top - parentRect.top + rect.height / 2
+      };
+    }
+
+    let elementoArrastrando = null;
+
+    function activarArrastre(el) {
+      el.addEventListener('mousedown', (e) => {
+        elementoArrastrando = el;
+        e.preventDefault();
+      });
+    }
+
+    activarArrastre(puntoC7);
+    activarArrastre(puntoManubrio);
+    activarArrastre(puntoLA);
+    activarArrastre(puntoRA);
+
+    window.addEventListener('mousemove', (e) => {
+      if (!elementoArrastrando) return;
+      const rect = contenedorVisor.getBoundingClientRect();
+
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+
+      x = Math.max(10, Math.min(rect.width - 10, x));
+      y = Math.max(10, Math.min(rect.height - 10, y));
+
+      posicionarElemento(elementoArrastrando, x, y);
+      actualizarCalculosBiomecanicos();
+    });
+
+    window.addEventListener('mouseup', () => {
+      elementoArrastrando = null;
+    });
+
+    function actualizarCalculosBiomecanicos() {
+      if (!imagenCargada) return;
+
+      const posLA = obtenerCentro(puntoLA);
+      const posRA = obtenerCentro(puntoRA);
+      const posC7 = obtenerCentro(puntoC7);
+      const posManubrio = obtenerCenter = obtenerCentro(puntoManubrio);
+
+      // Actualizar líneas de medición real
+      lineaHombros.setAttribute('x1', posLA.x);
+      lineaHombros.setAttribute('y1', posLA.y);
+      lineaHombros.setAttribute('x2', posRA.x);
+      lineaHombros.setAttribute('y2', posRA.y);
+
+      lineaEjeVertical.setAttribute('x1', posC7.x);
+      lineaEjeVertical.setAttribute('y1', posC7.y);
+      lineaEjeVertical.setAttribute('x2', posManubrio.x);
+      lineaEjeVertical.setAttribute('y2', posManubrio.y);
+
+      // Actualizar líneas de referencia ideales (plomada vertical y nivel horizontal basadas en el punto C7 como centro visual)
+      const rectVisor = contenedorVisor.getBoundingClientRect();
+      const anchoV = rectVisor.width > 0 ? rectVisor.width : 600;
+      const altoV = rectVisor.height > 0 ? rectVisor.height : 600;
+
+      // Plomada vertical ideal que pasa exactamente por la X de C7
+      refVerticalIdeal.setAttribute('x1', posC7.x);
+      refVerticalIdeal.setAttribute('y1', 0);
+      refVerticalIdeal.setAttribute('x2', posC7.x);
+      refVerticalIdeal.setAttribute('y2', altoV);
+
+      // Línea horizontal ideal que pasa exactamente por la Y del hombro más alto o punto medio
+      const centerY = (posLA.y + posRA.y) / 2;
+      refHorizontalIdeal.setAttribute('x1', 0);
+      refHorizontalIdeal.setAttribute('y1', centerY);
+      refHorizontalIdeal.setAttribute('x2', anchoV);
+      refHorizontalIdeal.setAttribute('y2', centerY);
+
+      const dx = posRA.x - posLA.x;
+      const dy = posRA.y - posLA.y;
+
+      const rad = Math.atan2(dy, dx);
+      const grados = Math.abs(rad * (180 / Math.PI));
+      const desnivelMm = Math.abs(dy) * 0.85;
+
+      const distanciaTotalPx = Math.sqrt(dx * dx + dy * dy);
+      const asiPorcentaje = distanciaTotalPx > 0 ? (Math.abs(dy) / distanciaTotalPx) * 100 : 0;
+
+      document.getElementById('val-angulo').textContent = `${grados.toFixed(1)}°`;
+      document.getElementById('val-desnivel').textContent = `${desnivelMm.toFixed(1)} mm`;
+      document.getElementById('val-asi').textContent = `${asiPorcentaje.toFixed(1)}%`;
+      document.getElementById('barra-asi-progreso').style.width = `${Math.min(100, asiPorcentaje)}%`;
+
+      const badge = document.getElementById('badge-estado');
+      if (grados >= 7.0) {
+        badge.textContent = "Severa / Atención Prioritaria";
+        badge.className = "badge-alerta";
+      } else if (grados >= 4.5) {
+        badge.textContent = "Moderada / Tratamiento Recomendado";
+        badge.className = "badge-alerta";
+      } else if (grados >= 2.0) {
+        badge.textContent = "Leve / Monitoreo";
+        badge.className = "badge-moderado";
+      } else {
+        badge.textContent = "Normal / Fisiológica";
+        badge.className = "badge-normal";
+      }
+    }
+  </script>
+
+</body>
 </html>

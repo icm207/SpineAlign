@@ -4,63 +4,212 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpineAlign</title>
+  <title>SpineAlign - Inicio</title>
+  <!-- Enlace al archivo CSS por separado -->
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos adicionales para mejorar la sección ¿Cómo funciona? y el formulario */
+    .spine-funcionamiento {
+      padding: 4rem 2rem;
+      background-color: #f1f5f9;
+      text-align: center;
+    }
+    .spine-funcionamiento-header h2 {
+      font-size: 2rem;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+    }
+    .spine-funcionamiento-header p {
+      color: #64748b;
+      font-size: 1.05rem;
+      margin-bottom: 2.5rem;
+    }
+    .spine-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      list-style: none;
+      padding: 0;
+    }
+    .spine-step-card {
+      background: #ffffff;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .spine-step-card:hover {
+      transform: translateY(-4px);
+    }
+    .spine-step-card .numero-paso {
+      display: inline-block;
+      background-color: rgba(67, 67, 176, 0.1);
+      color: rgb(67, 67, 176);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+    .spine-step-card h3 {
+      font-size: 1.2rem;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+    }
+    .spine-step-card p {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Estilos del formulario de contacto */
+    .form-contacto-box {
+      max-width: 600px;
+      margin: 1.5rem auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+    }
+    .grupo-form-contacto {
+      text-align: left;
+    }
+    .grupo-form-contacto label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+    .grupo-form-contacto input,
+    .grupo-form-contacto textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    .grupo-form-contacto input:focus,
+    .grupo-form-contacto textarea:focus {
+      border-color: rgb(67, 67, 176);
+      box-shadow: 0 0 0 3px rgba(67, 67, 176, 0.1);
+    }
+    .grupo-form-contacto textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+    .btn-enviar-form {
+      background-color: rgb(67, 67, 176);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn-enviar-form:hover {
+      background-color: #3737b0;
+    }
+  </style>
 </head>
 
 <body>
+  <!-- Barra de Navegación -->
   <header class="barra-navegacion">
-    <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
+    <a href="index.html">
+      <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
+    </a>
 
     <nav class="menu-derecha" aria-label="Principal">
-      <a href="index.html" class="mensaje-bienvenida">Bienvenido a SpineAlign</a>
-      <!-- Enlace que lleva al otro archivo HTML -->
+      <a href="index.html" class="mensaje-bienvenida" style="color: var(--medical-600); font-weight: 600;">Bienvenido a SpineAlign</a>
       <a href="evaluar.html">Nueva evaluación</a>
       <a href="historial.html">Historial</a>
-      <a href="login.html" class="boton-login">Iniciar sesión</a>
+      <a href="login.html" class="boton-login" id="nav-login-btn">Iniciar sesión</a>
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL DEL INDEX -->
+  <!-- Contenido Principal del Index -->
   <main>
     <section id="bienvenida" class="contenedor">
       <h2>¿Quiénes somos?</h2>
       <p>Bienvenido a SpineAlign. SpineAlign es un sitio web interactivo e iniciativa biomédica enfocada en la salud y la prevención postural de manera accesible e intuitiva. Mediante la integración de la cámara del dispositivo, la plataforma aplica un método de evaluación postural basado en fotogrametría computarizada, analizando puntos anatómicos clave en tiempo real.
       </p>
       <p> 
-        A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), Spine Align permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales. Su propósito no es reemplazar el diagnóstico médico profesional, sino servir como un punto de orientación preventiva para que los usuarios reconozcan su estado postural y, de ser necesario, acudan a una consulta con un especialista de la salud.
+        A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), SpineAlign permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales. Su propósito no es reemplazar el diagnóstico médico profesional, sino servir como un punto de orientación preventiva para que los usuarios reconozcan su estado postural y, de ser necesario, acudan a una consulta con un especialista de la salud.
       </p>
       <figure>
         <img src="assets/img/postura.png" alt="Persona posando de espaldas" class="centrada">
-      </figure> <!---- Es un contenedor para una imagen -->
-      </section>
-      <section id="como-funciona" class="spine-funcionamiento"> <!-- id = nombre único | class = estilo reutilizable | van juntos en la misma etiqueta -->
-        <header class="spine-funcionamiento-header">
-          <h2>¿Cómo funciona SpineAlign?</h2>
-          <p>Tres pasos para conocer tu postura</p>
-        </header>
-      
-        <ol class="spine-steps-grid">
-          <li class="spine-step-card">
-            <h3>Paso 1</h3>
-            <p>Activa la cámara de tu dispositivo.</p>
-          </li>
-          <li class="spine-step-card">
-            <h3>Paso 2</h3>
-            <p>Colócate de espaldas y toma la captura.</p>
-          </li>
-          <li class="spine-step-card">
-            <h3>Paso 3</h3>
-            <p>Revisa tu Ángulo Bi-Acromial y tu índice ASI.</p>
-          </li>
-        </ol>
-      </section>
+      </figure>
     </section>
-    <section id="contacto" class="contenedor">
+
+    <!-- SECCIÓN DE CÓMO FUNCIONA ACTUALIZADA -->
+    <section id="como-funciona" class="spine-funcionamiento">
+      <header class="spine-funcionamiento-header">
+        <h2>¿Cómo funciona SpineAlign?</h2>
+        <p>Tres pasos sencillos para conocer tu postura con precisión clínica</p>
+      </header>
+    
+      <ol class="spine-steps-grid">
+        <li class="spine-step-card">
+          <span class="numero-paso">Paso 1</span>
+          <h3>Activación de Cámara</h3>
+          <p>Activa la cámara de tu dispositivo o carga una fotografía de espalda para iniciar el análisis visual.</p>
+        </li>
+        <li class="spine-step-card">
+          <span class="numero-paso">Paso 2</span>
+          <h3>Posicionamiento Anatómico</h3>
+          <p>Ubícate de espaldas y ajusta de forma interactiva los marcadores en C7, Manubrium y ambos acromios.</p>
+        </li>
+        <li class="spine-step-card">
+          <span class="numero-paso">Paso 3</span>
+          <h3>Diagnóstico y Reporte</h3>
+          <p>Revisa en tiempo real tu Ángulo Bi-Acromial, el índice ASI y genera tu reporte clínico formal en PDF.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- SECCIÓN DE CONTACTO CON FORMULARIO -->
+    <section id="contacto" class="contenedor" style="text-align: center;">
       <h2>Contacto</h2>
+      <p>¿Tienes dudas o deseas colaborar con nosotros? Escríbenos tu nombre, correo y mensaje para más información acerca de nuestros módulos de fotogrametría.</p>
+      
+      <form id="form-contacto" class="form-contacto-box">
+        <div class="grupo-form-contacto">
+          <label for="nombre-contacto">Nombre</label>
+          <input type="text" id="nombre-contacto" placeholder="Tu nombre completo" required>
+        </div>
+
+        <div class="grupo-form-contacto">
+          <label for="email-contacto">Correo Electrónico</label>
+          <input type="email" id="email-contacto" placeholder="tucorreo@ejemplo.com" required>
+        </div>
+
+        <div class="grupo-form-contacto">
+          <label for="mensaje-contacto">Duda o Petición</label>
+          <textarea id="mensaje-contacto" placeholder="Escribe aquí tu mensaje o solicitud..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-enviar-form">Enviar Mensaje</button>
+      </form>
     </section>
   </main>
 
+  <!-- Pie de página -->
   <footer>
     <p>
       <strong>
@@ -68,8 +217,30 @@
       </strong>
       No sustituye el diagnóstico ni la valoración de un profesional de la salud.
     </p>
-    <p class="copyright"> Copyright © 2026 SpineAlign - Todos los derechos reservados</p>
+    <p class="copyright">Copyright © 2026 SpineAlign - Todos los derechos reservados</p>
   </footer>
+
+  <!-- SCRIPT PARA VALIDAR SESIÓN Y CONTACTO -->
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const sesionActiva = localStorage.getItem('token');
+      const navLoginBtn = document.getElementById('nav-login-btn');
+      if (sesionActiva && navLoginBtn) {
+        navLoginBtn.textContent = "Mi Cuenta";
+        navLoginBtn.href = "#";
+      }
+    });
+
+    const formContacto = document.getElementById('form-contacto');
+    if (formContacto) {
+      formContacto.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nombre = document.getElementById('nombre-contacto').value;
+        alert(`¡Gracias por contactarnos, ${nombre}! Tu mensaje ha sido enviado correctamente.`);
+        formContacto.reset();
+      });
+    }
+  </script>
 </body>
 
 </html>

@@ -1,265 +1,303 @@
 /* ==========================================
-   1. ESTILOS GENERALES Y VARIABLES
+   SpineAlign - Estilos de Evaluación Interactiva
    ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-    --color-principal: rgb(67, 67, 176);
-    --color-principal-hover: rgb(52, 52, 140);
-    --color-fondo: rgb(255, 250, 243);
-    --color-texto: #2d3748;
-    --color-texto-suave: #718096;
-    --color-blanco: #ffffff;
-    --color-borde: #e2e8f0;
-    --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    --sombra-media: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --medical-50: #f3f3fb;
+  --medical-100: #e5e5f7;
+  --medical-500: #5a5ac8;
+  --medical-600: rgb(67, 67, 176);
+  --medical-700: #3b3b9b;
+  --medical-900: #29296e;
+  
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-600: #475569;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--slate-50);
+  color: var(--slate-800);
+  display: flex;
+  flex-direction: column;
 }
 
-body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-/* ==========================================
-   2. BARRA DE NAVEGACIÓN
-   ========================================== */
+/* Barra de Navegación Invertida */
 .barra-navegacion {
-    background-color: var(--color-blanco);
-    border-bottom: 1px solid var(--color-borde);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    box-shadow: var(--sombra-suave);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  background-color: rgb(67, 67, 176);
+  border-bottom: 1px solid #3b3b9b;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 80px;
 }
 
-.logo {
-    height: 40px;
-    width: auto;
-}
+.logo { height: 40px; width: auto; object-fit: contain; }
 
-.menu-derecha {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
+.menu-derecha { display: flex; align-items: center; gap: 1.5rem; }
 
 .menu-derecha a {
-    text-decoration: none;
-    color: var(--color-texto);
-    font-weight: 500;
-    transition: color 0.2s ease;
+  text-decoration: none;
+  font-weight: 500;
+  color: #ffffff !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
 }
 
-.menu-derecha a:hover {
-    color: var(--color-principal);
+.menu-derecha a:hover { background-color: rgba(255, 255, 255, 0.15); }
+
+.menu-derecha .boton-login {
+  background-color: #ffffff !important;
+  color: rgb(67, 67, 176) !important;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem !important;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-.boton-login {
-    background-color: transparent;
-    border: 2px solid var(--color-principal);
-    color: var(--color-principal) !important;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+/* Layout principal de dos columnas */
+.evaluacion-layout {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.boton-login:hover {
-    background-color: var(--color-principal);
-    color: var(--color-blanco) !important;
+@media (max-width: 1024px) {
+  .evaluacion-layout { grid-template-columns: 1fr; }
 }
 
-/* ==========================================
-   3. CONTENIDO PRINCIPAL Y SECCIÓN EVALUAR
-   ========================================== */
-main {
-    flex: 1;
-    max-width: 1100px;
-    width: 100%;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
+/* Panel Izquierdo */
+.panel-izquierdo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-#evaluar {
-    background-color: var(--color-blanco);
-    border-radius: 16px;
-    padding: 2.5rem;
-    box-shadow: var(--sombra-media);
+.tarjeta-modulo {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--slate-200);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
-#evaluar h2 {
-    color: var(--color-principal);
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
+.tarjeta-modulo h2 {
+  font-size: 1.35rem;
+  color: var(--medical-900);
+  margin: 0 0 0.5rem 0;
+  font-weight: 800;
 }
 
-/* Pasos numerados */
-#evaluar ol {
-    display: flex;
-    gap: 1.5rem;
-    list-style: none;
-    counter-reset: paso;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-borde);
+.tarjeta-modulo h3 {
+  font-size: 1rem;
+  color: var(--medical-900);
+  margin: 0 0 1rem 0;
+  font-weight: 700;
 }
 
-#evaluar ol li {
-    counter-increment: paso;
-    font-weight: 600;
-    color: var(--color-texto-suave);
-    font-size: 0.95rem;
+.subtitulo-seccion {
+  font-size: 0.85rem;
+  color: var(--slate-600);
+  margin: 0 0 1rem 0;
 }
 
-#evaluar ol li::before {
-    content: counter(paso);
-    background-color: var(--color-fondo);
-    color: var(--color-principal);
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.5rem;
-    font-size: 0.85rem;
-    border: 1px solid var(--color-principal);
+.btn-cargar-foto {
+  display: block;
+  background-color: var(--medical-600);
+  color: #ffffff;
+  text-align: center;
+  padding: 0.8rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.btn-cargar-foto:hover { background-color: var(--medical-700); }
+
+.campo-datos label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--slate-600);
+  margin-bottom: 0.3rem;
 }
 
-/* Grid para visualizar y métricas */
-#evaluar {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+.campo-datos input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--slate-200);
+  font-size: 0.9rem;
+  outline: none;
+  background: var(--slate-50);
 }
 
-@media (min-width: 768px) {
-    #evaluar {
-        grid-template-columns: 1.2fr 1fr;
-        grid-template-areas: 
-            "titulo titulo"
-            "pasos pasos"
-            "visualizar metricas";
-    }
-    #evaluar h2 { grid-area: titulo; }
-    #evaluar ol { grid-area: pasos; }
-    #visualizar { grid-area: visualizar; }
-    #metricas { grid-area: metricas; }
+.metricas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-/* Artículos (Visualización y Métricas) */
-article {
-    background-color: var(--color-fondo);
-    border: 1px solid var(--color-borde);
-    border-radius: 12px;
-    padding: 1.5rem;
+.badge-normal { background: #d1fae5; color: #065f46; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; }
+.badge-moderado { background: #fef3c7; color: #92400e; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; }
+.badge-alerta { background: #fee2e2; color: #991b1b; padding: 0.25rem 0.6rem; border-radius: 9999px; font-size: 0.7rem; font-weight: 700; }
+
+.metricas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 
-article h3 {
-    font-size: 1.1rem;
-    color: var(--color-texto);
-    margin-bottom: 1rem;
+.caja-metrica {
+  background: var(--slate-50);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--slate-200);
 }
 
-/* Input de archivo estilizado */
-input[type="file"] {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--color-blanco);
-    border: 1px dashed var(--color-principal);
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    font-size: 0.9rem;
+.metrica-titulo { display: block; font-size: 0.75rem; color: var(--slate-600); margin-bottom: 0.25rem; font-weight: 600; }
+.metrica-valor { font-size: 1.25rem; font-weight: 800; color: var(--medical-900); font-family: monospace; display: block; }
+.metrica-desc { font-size: 0.65rem; color: #64748b; margin-top: 0.25rem; display: block; }
+
+.barra-asi-fondo { width: 100%; height: 8px; background: var(--slate-200); border-radius: 4px; overflow: hidden; }
+.barra-asi-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); transition: width 0.3s ease; }
+
+.btn-pdf {
+  width: 100%;
+  margin-top: 1.25rem;
+  background-color: var(--slate-200);
+  color: var(--slate-400);
+  font-weight: 700;
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: not-allowed;
+  font-size: 0.9rem;
+  transition: all 0.2s;
 }
 
-#lienzo {
-    width: 100%;
-    height: 220px;
-    background-color: var(--color-blanco);
-    border: 1px solid var(--color-borde);
-    border-radius: 8px;
-    display: block;
+/* Panel Derecho (Visor Interactivo) */
+.panel-derecho {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid var(--slate-200);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 550px;
+  position: relative;
 }
 
-/* Estilo de la lista de métricas (dl, dt, dd) */
-#metricas dl {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 0.75rem 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+.visor-interactivo {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--slate-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 600px;
 }
 
-#metricas dt {
-    color: var(--color-texto-suave);
+.placeholder-visor {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
 }
 
-#metricas dd {
-    font-weight: 600;
-    color: var(--color-texto);
-    text-align: right;
+.placeholder-visor i { font-size: 3rem; margin-bottom: 1rem; color: #475569; }
+.placeholder-visor p { font-size: 0.9rem; max-width: 280px; margin: 0 auto; color: #94a3b8; }
+
+#imagen-analisis {
+  max-width: 100%;
+  max-height: 700px;
+  object-fit: contain;
+  display: block;
 }
 
-/* Botón de Descargar PDF */
-button {
-    width: 100%;
-    background-color: var(--color-principal);
-    color: var(--color-blanco);
-    border: none;
-    padding: 0.85rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
+/* Líneas y Puntos Arrastrables */
+.guia-vertical {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(56, 189, 248, 0.8);
+  border-right: 1px dashed #38bdf8;
+  pointer-events: none;
+  transform: translateX(-50%);
 }
 
-button:hover:not(:disabled) {
-    background-color: var(--color-principal-hover);
+.svg-linea {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
 }
 
-button:disabled {
-    background-color: var(--color-borde);
-    color: var(--color-texto-suave);
-    cursor: not-allowed;
-    opacity: 0.7;
+.punto-control {
+  position: absolute;
+  width: 22px; height: 22px;
+  background: rgb(67, 67, 176);
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transform: translate(-50%, -50%);
 }
 
-/* ==========================================
-   4. PIE DE PÁGINA (FOOTER)
-   ========================================== */
+.punto-control:active { cursor: grabbing; }
+
+.etiqueta-punto {
+  position: absolute;
+  left: 28px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Footer */
 footer {
-    background-color: var(--color-blanco);
-    border-top: 1px solid var(--color-borde);
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.85rem;
-    color: var(--color-texto-suave);
-    margin-top: auto;
+  background-color: var(--medical-900);
+  color: #94a3b8;
+  padding: 1.5rem;
+  border-top: 1px solid var(--medical-700);
+  text-align: center;
+  font-size: 0.85rem;
 }
 
-footer p {
-    margin-bottom: 0.3rem;
-}
-
-footer strong {
-    color: var(--color-texto);
-}
-
-.copyright {
-    font-size: 0.75rem;
-    opacity: 0.8;
-}
+footer strong { color: #ffffff; }
+.copyright { margin-top: 0.3rem; color: #64748b; }

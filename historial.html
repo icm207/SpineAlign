@@ -1,88 +1,246 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SpineAlign - Historial de Evaluaciones</title>
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/styleevaluar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos específicos para la sección de historial */
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .historial-container {
+      max-width: 1100px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+    }
+    .historial-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .historial-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+    .buscador-historial {
+      padding: 0.65rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 280px;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .buscador-historial:focus {
+      border-color: rgb(67, 67, 176);
+      box-shadow: 0 0 0 3px rgba(67, 67, 176, 0.1);
+    }
+    .tabla-tarjeta {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+    }
+    table.tabla-datos {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    table.tabla-datos th {
+      background-color: #f1f5f9;
+      color: #334155;
+      font-weight: 600;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    table.tabla-datos td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #475569;
+    }
+    table.tabla-datos tr:last-child td {
+      border-bottom: none;
+    }
+    table.tabla-datos tr:hover {
+      background-color: #f8fafc;
+    }
+    .badge-estado {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-normal {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .badge-moderado {
+      background-color: #fef9c3;
+      color: #854d0e;
+    }
+    .badge-alerta {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    .btn-accion-tabla {
+      background: none;
+      border: none;
+      color: rgb(67, 67, 176);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+    }
+    .btn-accion-tabla:hover {
+      text-decoration: underline;
+      color: #3737b0;
+    }
+  </style>
 </head>
-
 <body>
+
   <!-- BARRA DE NAVEGACIÓN -->
   <header class="barra-navegacion">
     <a href="index.html">
       <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
     </a>
-
+    
     <nav class="menu-derecha" aria-label="Principal">
       <a href="index.html">Inicio</a>
-      <a href="evaluar.html">Nueva evaluación</a>
-      <a href="historial.html" style="text-decoration: underline;">Historial</a>
+      <a href="evaluar.html">Nueva Evaluación</a>
+      <a href="login.html" class="boton-login" id="nav-login-btn">Iniciar sesión</a>
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL: HISTORIAL -->
-  <main class="contenedor-historial">
-    <section class="contenedor contenedor-ancho">
-      <h2>Historial de evaluaciones posturales</h2>
-      <p>Consulta el registro previo de tus análisis de fotogrametría y evolución del Índice de Asimetría Postural.</p>
+  <!-- CONTENIDO PRINCIPAL DEL HISTORIAL -->
+  <main class="historial-container">
+    <div class="historial-header">
+      <h2>Historial de Evaluaciones Clínicas</h2>
+      <input type="text" id="buscador" class="buscador-historial" placeholder="Buscar por paciente o ID...">
+    </div>
 
-      <!-- Tabla de historial moderna y adaptable -->
-      <div class="tabla-contenedor">
-        <table class="tabla-historial">
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Paciente / Usuario</th>
-              <th>Ángulo Bi-acromial</th>
-              <th>Índice de Asimetría</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>24/10/2026</td>
-              <td>Hostin Muñoz</td>
-              <td>1.2° (Leve desviación)</td>
-              <td>3.4%</td>
-              <td><span class="badge warning">Revisión sugerida</span></td>
-              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
-            </tr>
-            <tr>
-              <td>15/09/2026</td>
-              <td>Hostin Muñoz</td>
-              <td>0.4° (Simétrico)</td>
-              <td>1.1%</td>
-              <td><span class="badge success">Normal</span></td>
-              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
-            </tr>
-            <tr>
-              <td>02/08/2026</td>
-              <td>Hostin Muñoz</td>
-              <td>2.1° (Moderada)</td>
-              <td>5.8%</td>
-              <td><span class="badge danger">Atención requerida</span></td>
-              <td><a href="#" class="btn-tabla">Ver reporte</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="acciones-historial">
-        <a href="evaluar.html" class="boton-principal" style="max-width: 280px; display: inline-block; text-align: center; text-decoration: none;">Realizar nueva evaluación</a>
-      </div>
-    </section>
+    <div class="tabla-tarjeta">
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>ID / H. Clínica</th>
+            <th>Paciente</th>
+            <th>Fecha</th>
+            <th>Ángulo Bi-Acromial</th>
+            <th>Índice ASI</th>
+            <th>Estado Clínico</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cuerpo">
+          <!-- Fila de ejemplo 1 -->
+          <tr>
+            <td>PX-2026-01</td>
+            <td><strong>Carlos Mendoza</strong></td>
+            <td>12/03/2026</td>
+            <td>1.4°</td>
+            <td>1.2%</td>
+            <td><span class="badge-estado badge-normal">Normal / Fisiológica</span></td>
+            <td>
+              <button class="btn-accion-tabla" onclick="verDetalle('PX-2026-01')"><i class="fa-solid fa-eye"></i> Ver</button>
+            </td>
+          </tr>
+          <!-- Fila de ejemplo 2 -->
+          <tr>
+            <td>PX-2026-02</td>
+            <td><strong>María Fernanda Gómez</strong></td>
+            <td>14/03/2026</td>
+            <td>3.8°</td>
+            <td>4.5%</td>
+            <td><span class="badge-estado badge-moderado">Leve / Monitoreo</span></td>
+            <td>
+              <button class="btn-accion-tabla" onclick="verDetalle('PX-2026-02')"><i class="fa-solid fa-eye"></i> Ver</button>
+            </td>
+          </tr>
+          <!-- Fila de ejemplo 3 -->
+          <tr>
+            <td>PX-2026-03</td>
+            <td><strong>Andrés R. Torres</strong></td>
+            <td>18/03/2026</td>
+            <td>7.5°</td>
+            <td>8.9%</td>
+            <td><span class="badge-estado badge-alerta">Severa / Prioritaria</span></td>
+            <td>
+              <button class="btn-accion-tabla" onclick="verDetalle('PX-2026-03')"><i class="fa-solid fa-eye"></i> Ver</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 
   <!-- FOOTER -->
   <footer>
     <p>
-      SpineAlign es una herramienta de apoyo. No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+      <strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.
     </p>
-    <p class="copyright">Copyright © 2026 SpineAlign - Todos los derechos reservados</p>
+    <p class="copyright">© 2026 SpineAlign - Todos los derechos reservados</p>
   </footer>
-</body>
 
+  <!-- SCRIPT DE INTERACTIVIDAD DEL HISTORIAL -->
+  <script>
+    // Validar sesión activa en la barra superior
+    window.addEventListener('DOMContentLoaded', () => {
+      const sesionActiva = localStorage.getItem('token');
+      const navLoginBtn = document.getElementById('nav-login-btn');
+      if (sesionActiva && navLoginBtn) {
+        navLoginBtn.textContent = "Mi Cuenta";
+        navLoginBtn.href = "#";
+      } else {
+        // Opcional: si requiere login obligatorio para ver historiales, puedes redirigir aquí:
+        // window.location.href = 'login.html';
+      }
+    });
+
+    // Filtro de búsqueda rápido en la tabla
+    const buscador = document.getElementById('buscador');
+    buscador.addEventListener('keyup', (e) => {
+      const texto = e.target.value.toLowerCase();
+      const filas = document.querySelectorAll('#tabla-cuerpo tr');
+
+      filas.forEach(fila => {
+        const contenidoFila = fila.textContent.toLowerCase();
+        if (contenidoFila.includes(texto)) {
+          fila.style.display = '';
+        } else {
+          fila.style.display = 'none';
+        }
+      });
+    });
+
+    function verDetalle(idPaciente) {
+      alert(`Abriendo el expediente y reporte clínico guardado para el paciente: ${idPaciente}`);
+      // Aquí en el futuro redirigirás al visor cargando los datos de MongoDB de esta evaluación específica.
+    }
+  </script>
+
+</body>
 </html>

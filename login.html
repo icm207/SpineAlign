@@ -1,119 +1,179 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpineAlign</title>
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>SpineAlign - Iniciar Sesión</title>
+  <link rel="stylesheet" href="assets/css/styleevaluar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos específicos para la vista de login centrada */
+    body {
+      background-color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+    .tarjeta-login {
+      background: #ffffff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid #e2e8f0;
+    }
+    .tarjeta-login h2 {
+      margin-top: 0;
+      color: #0f172a;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .tarjeta-login p.subtitulo {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    .grupo-formulario {
+      margin-bottom: 1.25rem;
+    }
+    .grupo-formulario label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+    .grupo-formulario input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .grupo-formulario input:focus {
+      border-color: rgb(67, 67, 176);
+      box-shadow: 0 0 0 3px rgba(67, 67, 176, 0.1);
+    }
+    .btn-submit-login {
+      width: 100%;
+      background-color: rgb(67, 67, 176);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-submit-login:hover {
+      background-color: #3737b0;
+    }
+    .login-footer-text {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    .login-footer-text a {
+      color: rgb(67, 67, 176);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .login-footer-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
-
 <body>
+
   <!-- BARRA DE NAVEGACIÓN -->
   <header class="barra-navegacion">
     <a href="index.html">
       <img src="assets/img/iotipo-.png" alt="Isotipo SpineAlign" class="logo">
     </a>
-
+    
     <nav class="menu-derecha" aria-label="Principal">
       <a href="index.html">Inicio</a>
-      <a href="evaluar.html">Nueva evaluación</a>
-      <a href="historial.html">Historial</a>
+      <a href="evaluar.html">Evaluación</a>
     </nav>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL: DOS COLUMNAS -->
-  <main class="auth-layout">
-    
-    <!-- TARJETA 1: INICIAR SESIÓN -->
-    <section class="contenedor contenedor-login">
-      <h2>Iniciar sesión</h2>
-      <p>Accede a tu cuenta para guardar y consultar de tus evaluaciones posturales.</p>
-
-      <form action="#" method="POST" class="formulario-login">
-        <div class="campo-formulario">
-          <input type="email" id="correo" name="correo" placeholder="Correo electrónico tu_correo@ejemplo.com" required>
+  <!-- CONTENEDOR PRINCIPAL DEL LOGIN -->
+  <main class="login-container">
+    <div class="tarjeta-login">
+      <h2>Iniciar Sesión</h2>
+      <p class="subtitulo">Accede a tu cuenta profesional de SpineAlign</p>
+      
+      <form id="form-login">
+        <div class="grupo-formulario">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" id="email" placeholder="medico@spinealign.com" required>
         </div>
 
-        <div class="campo-formulario">
-          <input type="password" id="password" name="password" placeholder="Contraseña ••••••••••" required>
+        <div class="grupo-formulario">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" placeholder="••••••••" required>
         </div>
 
-        <div style="text-align: right;">
-          <a href="#" class="link-olvido">¿Olvidaste tu contraseña?</a>
-        </div>
-
-        <button type="submit" class="boton-principal">Entrar</button>
-
-        <button type="button" class="boton-social">
-          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.19v3.15C3.17 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.19C.43 8.12 0 9.87 0 11.7s.43 3.58 1.19 5.12l4.09-2.55z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.68 1.19 6.58l4.09 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
-          Continuar con Google
-        </button>
+        <button type="submit" class="btn-submit-login">Ingresar al Sistema</button>
       </form>
 
-      <p class="texto-secundario">
-        ¿Aún to tien una cuenta? <a href="#">Regístrate aquí</a>
-      </p>
-    </section>
-
-    <!-- TARJETA 2: CREAR UNA CUENTA -->
-    <section class="contenedor contenedor-login">
-      <h2>Crear una cuenta</h2>
-      <p>Regístrate en SpineAlign y lleva un seguimiento completo lu salud postural.</p>
-
-      <form action="#" method="POST" class="formulario-login">
-        <div class="campo-formulario">
-          <input type="text" id="nombre" name="nombre" placeholder="Nombre completo Tu nombre" required>
-        </div>
-
-        <div class="campo-formulario">
-          <input type="text" id="edad" name="edad" placeholder="Edad 9, 18" required>
-        </div>
-
-        <div class="campo-formulario">
-          <input type="email" id="correo-reg" name="correo" placeholder="Correo electrónico tu_correo@ejemplo.com" required>
-        </div>
-
-        <div class="campo-formulario">
-          <select id="sexo" name="sexo" required class="select-personalizado">
-            <option value="" disabled selected>Sexo biológico / Género Selecciona la opción</option>
-            <option value="masculino">Masculino</option>
-            <option value="femenino">Femenino</option>
-            <option value="otro">Prefiero no decirlo</option>
-          </select>
-        </div>
-
-        <div class="campo-formulario">
-          <input type="password" id="password-reg" name="password" placeholder="Contraseña ••••••••••" required>
-        </div>
-
-        <div class="campo-formulario" style="flex-direction: row; align-items: center; gap: 0.5rem;">
-          <input type="checkbox" required style="width: auto; margin: 0;">
-          <label style="font-size: 0.85rem; font-weight: normal; margin: 0;">
-            Acepto los <a href="#" class="link-olvido">Términos</a> y la <a href="#" class="link-olvido">Politica de Privacidad</a>.
-          </label>
-        </div>
-
-        <div class="nota-privacidad">
-          <p style="margin: 0;">🔒 <strong>Privacidad garantizada:</strong> Tus imégericas posturales son procesadas de forma segura y confidencial.</p>
-        </div>
-
-        <button type="submit" class="boton-principal" style="background: linear-gradient(135deg, rgb(67, 67, 176), rgb(90, 90, 200));">Registrarse</button>
-      </form>
-    </section>
-
+      <div class="login-footer-text">
+        ¿No tienes una cuenta? <a href="registro.html">Regístrate aquí</a>
+      </div>
+    </div>
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <p>
-      SpineAlign en una herramienta de apoyo. No sustituye el diagnóstico ni la valoración de un profesional de la salud.
+      <strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.
     </p>
-    <p class="copyright">Copyright © 2020 SpineAlign - Todos los derechos reservados</p>
+    <p class="copyright">© 2026 SpineAlign - Todos los derechos reservados</p>
   </footer>
-  <!-- Enlace al script de autenticación -->
-  <script src="./assets/js/main.js"></script>
-</body>
-</html>
-</body>
 
+  <!-- SCRIPT DE MANEJO DE LOGIN -->
+  <script>
+    const formLogin = document.getElementById('form-login');
+
+    formLogin.addEventListener('submit', (e) => {
+      e.preventDefault(); // Evitamos que la página recargue por defecto
+
+      const emailInput = document.getElementById('email').value;
+      const passwordInput = document.getElementById('password').value;
+
+      // Validación simple de ejemplo (aquí en el futuro conectarás tu API de Node.js con MongoDB)
+      if (emailInput && passwordInput) {
+        // Simulamos la creación del token de sesión exitosa
+        localStorage.setItem('token', 'fake-jwt-token-valido-2026');
+        
+        alert("¡Inicio de sesión exitoso! Bienvenido, " + emailInput);
+
+        // Redirigir de vuelta a la sección de evaluación (o al panel principal)
+        window.location.href = 'evaluar.html';
+      } else {
+        alert("Por favor, completa todos los campos.");
+      }
+    });
+  </script>
+
+</body>
 </html>
