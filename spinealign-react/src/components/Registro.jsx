@@ -7,11 +7,16 @@ export default function Registro() {
   const [email, setEmail] = useState('');
   const [edad, setEdad] = useState('');
   const [sexo, setSexo] = useState('');
+  const [altura, setAltura] = useState('');
+  const [peso, setPeso] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (nombre && email && edad && sexo && password) {
+    if (nombre && email && edad && sexo && altura && peso && password) {
+      const datosUsuario = { nombre, email, edad, sexo, altura, peso, password };
+      console.log("Datos listos para enviar al backend:", datosUsuario);
+      
       alert("¡Cuenta creada exitosamente para " + nombre + "! Ahora puedes iniciar sesión.");
       window.location.href = '/login';
     } else {
@@ -31,23 +36,24 @@ export default function Registro() {
         </nav>
       </header>
 
-      <main className="auth-layout" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+      <main className="auth-layout" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, padding: '2rem 0' }}>
         <div className="contenedor-login" style={{ width: '100%', maxWidth: '440px' }}>
           <h2>Crear Cuenta</h2>
           <p>Regístrate para gestionar evaluaciones y reportes clínicos</p>
           
           <form className="formulario-login" onSubmit={handleSubmit}>
             <div className="campo-formulario">
-              <input type="text" placeholder="Dr. Juan Pérez" value={nombre} onChange={e => setNombre(e.target.value)} required />
+              <input type="text" placeholder="Nombre completo" value={nombre} onChange={e => setNombre(e.target.value)} required />
             </div>
 
             <div className="campo-formulario">
-              <input type="email" placeholder="medico@spinealign.com" value={email} onChange={e => setEmail(e.target.value)} required />
+              <input type="email" placeholder="correo@ejemplo.com" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
 
+            {/* Fila para Edad y Sexo */}
             <div style={{ display: 'flex', gap: '1rem' }}>
               <div className="campo-formulario" style={{ flex: 1 }}>
-                <input type="number" placeholder="Edad (30)" min="18" max="100" value={edad} onChange={e => setEdad(e.target.value)} required />
+                <input type="number" placeholder="Edad (ej: 25)" min="18" max="100" value={edad} onChange={e => setEdad(e.target.value)} required />
               </div>
 
               <div className="campo-formulario" style={{ flex: 1 }}>
@@ -57,6 +63,17 @@ export default function Registro() {
                   <option value="Femenino">Femenino</option>
                   <option value="Otro">Otro</option>
                 </select>
+              </div>
+            </div>
+
+            {/* Fila nueva para Altura y Peso */}
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="campo-formulario" style={{ flex: 1 }}>
+                <input type="number" placeholder="Altura (cm, ej: 175)" min="50" max="250" value={altura} onChange={e => setAltura(e.target.value)} required />
+              </div>
+
+              <div className="campo-formulario" style={{ flex: 1 }}>
+                <input type="number" placeholder="Peso (kg, ej: 70)" min="30" max="300" value={peso} onChange={e => setPeso(e.target.value)} required />
               </div>
             </div>
 
