@@ -88,3 +88,47 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+// ==========================================
+// RUTA PARA GUARDAR UNA EVALUACIÓN EN EL HISTORIAL
+// ==========================================
+app.post('/api/evaluacion', async (req, res) => {
+    try {
+        const { correo, anguloBiacromial, indiceAsimetria } = req.body;
+        
+        const usuario = await Usuario.findOne({ correo });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        // Agregar la nueva evaluación al arreglo
+        usuario.historialEvaluaciones.push({
+            anguloBiacromial,
+            indiceAsimetria
+        });
+
+        await usuario.save();
+        res.status(201).json({ mensaje: '¡Evaluación guardada en el historial con éxito!' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al guardar la evaluación.' });
+    }
+});
+
+// ==========================================
+// RUTA PARA OBTENER EL HISTORIAL DE UN USUARIO
+// ==========================================
+app.get('/api/historial/:correo', async (req, res) => {
+    try {
+        const { correo } = req.params;
+        const usuario = await Usuario.findOne({ correo });
+        
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        res.json(usuario.historialEvaluaciones);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener el historial.' });
+    }
+});
