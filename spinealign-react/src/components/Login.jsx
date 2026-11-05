@@ -51,6 +51,7 @@ export default function Login() {
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/">Inicio</a>
           <a href="/evaluar">Evaluación</a>
+          <a href="/mi-cuenta" className="boton-login" id="nav-login-btn">Mi Cuenta</a>
         </nav>
       </header>
 

@@ -6,8 +6,8 @@ const cors = require('cors');
 const app = express();
 
 // Middlewares
-app.use(express.json({ limit: '10mb' })); // Aumentamos el límite de tamaño para permitir imágenes en Base64
-app.use(cors());                          // Permite la conexión con el frontend
+app.use(express.json({ limit: '10mb' })); // Permite recibir imágenes en Base64 de mayor tamaño
+app.use(cors());                          // Habilita la comunicación con el frontend
 
 // ==========================================
 // 1. ESQUEMA Y MODELO DE USUARIO
@@ -16,7 +16,7 @@ const evaluacionSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now },
     anguloBiacromial: { type: Number },
     indiceAsimetria: { type: Number },
-    imagenUrl: { type: String } // Guarda la foto de la espalda con los puntos (Base64)
+    imagenUrl: { type: String } // Guarda la captura del visor postural con puntos (Base64)
 });
 
 const usuarioSchema = new mongoose.Schema({
@@ -26,20 +26,21 @@ const usuarioSchema = new mongoose.Schema({
     sexo: { type: String, required: true },
     altura: { type: Number, required: true }, // Altura en cm
     peso: { type: Number, required: true },    // Peso en kg
+    idPaciente: { type: String, default: 'PX-2026-01' }, // ID clínico personalizado
     password: { type: String, required: true },
-    historialEvaluaciones: [evaluacionSchema]   // Arreglo para guardar las evaluaciones previas
+    historialEvaluaciones: [evaluacionSchema]   // Registro de evaluaciones previas
 });
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 
 // ==========================================
-// 2. CONEXIÓN ÚNICA A MONGODB ATLAS
+// 2. CONEXIÓN A MONGODB ATLAS
 // ==========================================
 mongoose.connect('mongodb+srv://hostinjmr2_db_user:MAGayy9nGy66eff7@cluster0.mbunrpc.mongodb.net/spinealign?retryWrites=true&w=majority')
     .then(() => console.log('Conectado exitosamente a MongoDB Atlas'))
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
-// Ruta de prueba
+// Ruta de prueba inicial
 app.get('/', (req, res) => {
     res.send('¡El servidor de SpineAlign está funcionando correctamente!');
 });
@@ -51,17 +52,14 @@ app.post('/api/registro', async (req, res) => {
     try {
         const { nombre, edad, correo, sexo, altura, peso, password } = req.body;
 
-        // Verificar si el usuario ya existe con ese correo
         const usuarioExistente = await Usuario.findOne({ correo: correo.trim().toLowerCase() });
         if (usuarioExistente) {
             return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
         }
 
-        // Encriptar la contraseña por seguridad
         const salt = await bcrypt.genSalt(10);
         const passwordEncriptada = await bcrypt.hash(password, salt);
 
-        // Crear y guardar el nuevo usuario en MongoDB
         const nuevoUsuario = new Usuario({
             nombre,
             edad,
@@ -69,6 +67,7 @@ app.post('/api/registro', async (req, res) => {
             sexo,
             altura,
             peso,
+            idPaciente: 'PX-2026-01',
             password: passwordEncriptada,
             historialEvaluaciones: []
         });
@@ -83,7 +82,7 @@ app.post('/api/registro', async (req, res) => {
 });
 
 // ==========================================
-// 3.1. RUTA DE LOGIN REAL (POST /api/login)
+// 4. RUTA DE LOGIN (POST /api/login)
 // ==========================================
 app.post('/api/login', async (req, res) => {
     try {
@@ -112,7 +111,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // ==========================================
-// RUTA PARA GUARDAR UNA EVALUACIÓN EN EL HISTORIAL
+// 5. RUTA PARA GUARDAR EVALUACIÓN (POST /api/evaluacion)
 // ==========================================
 app.post('/api/evaluacion', async (req, res) => {
     try {
@@ -142,7 +141,7 @@ app.post('/api/evaluacion', async (req, res) => {
 });
 
 // ==========================================
-// RUTA PARA OBTENER EL HISTORIAL DE UN USUARIO (CON DATOS PERSONALES)
+// 6. RUTA PARA OBTENER EL HISTORIAL (GET /api/historial/:correo)
 // ==========================================
 app.get('/api/historial/:correo', async (req, res) => {
     try {
@@ -165,7 +164,8 @@ app.get('/api/historial/:correo', async (req, res) => {
             edad: usuario.edad || "--",
             sexo: usuario.sexo || "--",
             estatura: usuario.altura ? `${usuario.altura} cm` : "--",
-            peso: usuario.peso ? `${usuario.peso} kg` : "--"
+            peso: usuario.peso ? `${usuario.peso} kg` : "--",
+            idPaciente: usuario.idPaciente || "PX-2026-01"
         }));
 
         res.json(historialConDatos);
@@ -176,7 +176,7 @@ app.get('/api/historial/:correo', async (req, res) => {
 });
 
 // ==========================================
-// RUTA PARA OBTENER LOS DATOS DEL PACIENTE
+// 7. RUTA PARA OBTENER DATOS DE USUARIO (GET /api/usuario/:correo)
 // ==========================================
 app.get('/api/usuario/:correo', async (req, res) => {
     try {
@@ -193,7 +193,8 @@ app.get('/api/usuario/:correo', async (req, res) => {
             correo: usuario.correo,
             sexo: usuario.sexo,
             altura: usuario.altura,
-            peso: usuario.peso
+            peso: usuario.peso,
+            idPaciente: usuario.idPaciente || 'PX-2026-01'
         });
     } catch (error) {
         console.error(error);
@@ -202,7 +203,32 @@ app.get('/api/usuario/:correo', async (req, res) => {
 });
 
 // ==========================================
-// 4. INICIAR EL SERVIDOR
+// 8. RUTA PARA ACTUALIZAR EL PERFIL (PUT /api/usuario/:correo)
+// ==========================================
+app.put('/api/usuario/:correo', async (req, res) => {
+    try {
+        const { correo } = req.params;
+        const { nombre, edad, sexo, altura, peso, idPaciente } = req.body;
+
+        const usuarioActualizado = await Usuario.findOneAndUpdate(
+            { correo: { $regex: new RegExp(`^${correo.trim()}$`, 'i') } },
+            { nombre, edad, sexo, altura, peso, idPaciente },
+            { new: true }
+        );
+
+        if (!usuarioActualizado) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        res.json({ mensaje: '¡Perfil actualizado con éxito!', usuario: usuarioActualizado });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar el usuario.' });
+    }
+});
+
+// ==========================================
+// 9. INICIAR EL SERVIDOR
 // ==========================================
 const PORT = 3000;
 app.listen(PORT, () => {

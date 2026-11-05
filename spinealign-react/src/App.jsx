@@ -6,6 +6,7 @@ import Evaluar from './components/Evaluar';
 import Historial from './components/Historial';
 import Login from './components/Login';
 import Registro from './components/Registro';
+import MiCuenta from './components/MiCuenta';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/historial" element={<Historial />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/mi-cuenta" element={<MiCuenta />} />
       </Routes>
     </Router>
   );

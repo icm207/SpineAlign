@@ -1,14 +1,14 @@
 // src/components/Home.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../assets/css/style.css';
 
 export default function Home() {
+  const [estaLogueado, setEstaLogueado] = useState(false);
+
   useEffect(() => {
     const sesionActiva = localStorage.getItem('token');
-    const navLoginBtn = document.getElementById('nav-login-btn');
-    if (sesionActiva && navLoginBtn) {
-      navLoginBtn.textContent = "Mi Cuenta";
-      navLoginBtn.href = "#";
+    if (sesionActiva) {
+      setEstaLogueado(true);
     }
   }, []);
 
@@ -29,7 +29,11 @@ export default function Home() {
           <a href="/" className="mensaje-bienvenida">Bienvenido a SpineAlign</a>
           <a href="/evaluar">Nueva evaluación</a>
           <a href="/historial">Historial</a>
-          <a href="/login" className="boton-login" id="nav-login-btn">Iniciar sesión</a>
+          {estaLogueado ? (
+            <a href="/mi-cuenta" className="boton-login">Mi Cuenta</a>
+          ) : (
+            <a href="/login" className="boton-login">Iniciar sesión</a>
+          )}
         </nav>
       </header>
 
@@ -94,7 +98,7 @@ export default function Home() {
 
       <footer>
         <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
-        <p className="copyright">Copyright © 2026 SpineAlign - Todos los derechos reservados</p>
+        <p className="copyright">Copyright ©️ 2026 SpineAlign - Todos los derechos reservados</p>
       </footer>
     </div>
   );

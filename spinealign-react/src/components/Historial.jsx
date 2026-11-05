@@ -6,6 +6,7 @@ import '../assets/css/historial.css';
 export default function Historial() {
   const [filtro, setFiltro] = useState('');
   const [filas, setFilas] = useState([]);
+  const [estaLogueado, setEstaLogueado] = useState(false);
 
   useEffect(() => {
     const sesionActiva = localStorage.getItem('token');
@@ -14,11 +15,8 @@ export default function Historial() {
                           localStorage.getItem('usuarioCorreo') ||
                           localStorage.getItem('userEmail');
 
-    const navLoginBtn = document.getElementById('nav-login-btn');
-    
-    if (sesionActiva && navLoginBtn) {
-      navLoginBtn.textContent = "Mi Cuenta";
-      navLoginBtn.href = "#";
+    if (sesionActiva) {
+      setEstaLogueado(true);
     }
 
     if (correoUsuario) {
@@ -42,7 +40,7 @@ export default function Historial() {
               }
 
               return {
-                id: `PX-2026-0${index + 1}`,
+                id: item.idPaciente || `PX-2026-0${index + 1}`,
                 nombre: item.nombre || 'Paciente General',
                 edad: item.edad || '--',
                 sexo: item.sexo || '--',
@@ -160,7 +158,11 @@ export default function Historial() {
         <nav className="menu-derecha" aria-label="Menú principal de navegación">
           <a href="/">Inicio</a>
           <a href="/evaluar">Nueva Evaluación</a>
-          <a href="/login" className="boton-login" id="nav-login-btn">Iniciar sesión</a>
+          {estaLogueado ? (
+            <a href="/mi-cuenta" className="boton-login">Mi Cuenta</a>
+          ) : (
+            <a href="/login" className="boton-login">Iniciar sesión</a>
+          )}
         </nav>
       </header>
 

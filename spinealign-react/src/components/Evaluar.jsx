@@ -7,25 +7,24 @@ export default function Evaluar() {
   const [streamCamara, setStreamCamara] = useState(null);
   const [imagenCargada, setImagenCargada] = useState(false);
   const [urlImagenCapturada, setUrlImagenCapturada] = useState('');
-  
+ 
   const videoWebcamRef = useRef(null);
   const imagenAnalisisRef = useRef(null);
   const placeholderVisorRef = useRef(null);
   const contenedorVisorRef = useRef(null);
-  
+ 
   const puntoC7Ref = useRef(null);
   const puntoManubrioRef = useRef(null);
   const puntoLARef = useRef(null);
   const puntoRARef = useRef(null);
   const svgConexionRef = useRef(null);
-  
+ 
   const lineaHombrosRef = useRef(null);
   const lineaEjeVerticalRef = useRef(null);
   const refVerticalIdealRef = useRef(null);
   const refHorizontalIdealRef = useRef(null);
-  
+ 
   const btnPdfRef = useRef(null);
-  const navLoginBtnRef = useRef(null);
 
   const [grupoInicialDisplay, setGrupoInicialDisplay] = useState('flex');
   const [grupoCamaraDisplay, setGrupoCamaraDisplay] = useState('none');
@@ -40,21 +39,13 @@ export default function Evaluar() {
   const [badgeClass, setBadgeClass] = useState("badge-normal");
   const [pdfDisabled, setPdfDisabled] = useState(true);
 
-  useEffect(() => {
-    const sesionActiva = localStorage.getItem('token');
-    if (sesionActiva && navLoginBtnRef.current) {
-      navLoginBtnRef.current.textContent = "Mi Cuenta";
-      navLoginBtnRef.current.href = "#";
-    }
-  }, []);
-
   // ==========================================
   // GENERAR REPORTE PDF CON DATOS DE MONGODB
   // ==========================================
   const handlePdfClick = async () => {
     const sesionActiva = localStorage.getItem('token');
-    let correoUsuario = localStorage.getItem('correo') || 
-                          localStorage.getItem('email') || 
+    let correoUsuario = localStorage.getItem('correo') ||
+                          localStorage.getItem('email') ||
                           localStorage.getItem('usuarioCorreo') ||
                           localStorage.getItem('userEmail');
 
@@ -69,7 +60,8 @@ export default function Evaluar() {
       edad: "--",
       sexo: "--",
       altura: "--",
-      peso: "--"
+      peso: "--",
+      idPaciente: "PX-2026-01"
     };
 
     try {
@@ -81,7 +73,8 @@ export default function Evaluar() {
           edad: dataUser.edad !== undefined ? dataUser.edad : "--",
           sexo: dataUser.sexo || "--",
           altura: dataUser.altura ? `${dataUser.altura} cm` : "--",
-          peso: dataUser.peso ? `${dataUser.peso} kg` : "--"
+          peso: dataUser.peso ? `${dataUser.peso} kg` : "--",
+          idPaciente: dataUser.idPaciente || "PX-2026-01"
         };
       }
     } catch (e) {
@@ -102,7 +95,6 @@ export default function Evaluar() {
       }
     }
 
-    const idPaciente = "PX-2026-01";
     const fechaActual = new Date().toLocaleDateString();
 
     const ventanaReporte = window.open('', '_blank', 'width=850,height=800');
@@ -139,7 +131,7 @@ export default function Evaluar() {
           <main>
             <section class="info-grid">
               <div><strong>Paciente:</strong> ${datosPaciente.nombre}</div>
-              <div><strong>ID Historia:</strong> ${idPaciente}</div>
+              <div><strong>ID Historia:</strong> ${datosPaciente.idPaciente}</div>
               <div><strong>Edad:</strong> ${datosPaciente.edad} años</div>
               <div><strong>Sexo:</strong> ${datosPaciente.sexo}</div>
               <div><strong>Estatura:</strong> ${datosPaciente.altura}</div>
@@ -188,8 +180,8 @@ export default function Evaluar() {
   const guardarEvaluacionBD = async () => {
     const sesionActiva = localStorage.getItem('token');
 
-    let correoUsuario = localStorage.getItem('correo') || 
-                          localStorage.getItem('email') || 
+    let correoUsuario = localStorage.getItem('correo') ||
+                          localStorage.getItem('email') ||
                           localStorage.getItem('usuarioCorreo') ||
                           localStorage.getItem('userEmail');
 
@@ -240,7 +232,7 @@ export default function Evaluar() {
       const data = await response.json();
       if (response.ok) {
         alert("¡Evaluación y análisis visual guardados exitosamente en el historial!");
-        window.location.href = '/historial'; 
+        window.location.href = '/historial';
       } else {
         alert(`Error al guardar: ${data.error || 'No se pudo procesar'}`);
       }
@@ -542,7 +534,7 @@ export default function Evaluar() {
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/">Inicio</a>
           <a href="/historial">Historial</a>
-          <a href="/login" className="boton-login" ref={navLoginBtnRef} id="nav-login-btn">Iniciar sesión</a>
+          <a href="/mi-cuenta" className="boton-login">Mi Cuenta</a>
         </nav>
       </header>
 
@@ -551,7 +543,7 @@ export default function Evaluar() {
           <div className="tarjeta-modulo">
             <h2>Nueva Evaluación</h2>
             <p className="subtitulo-seccion">Usa la cámara o sube una foto, luego arrastra libremente C7, el Manubrium y los hombros.</p>
-            
+           
             <div className="controles-fuente" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div id="grupo-botones-inicial" style={{ display: grupoInicialDisplay, gap: '0.5rem' }}>
                 <button type="button" onClick={activarCamara} className="btn-cargar-foto" style={{ flex: 1 }}>
@@ -627,21 +619,21 @@ export default function Evaluar() {
               </div>
             </div>
 
-            <button 
-              id="btn-descargar-pdf" 
-              ref={btnPdfRef} 
-              className="btn-pdf" 
-              disabled={pdfDisabled} 
+            <button
+              id="btn-descargar-pdf"
+              ref={btnPdfRef}
+              className="btn-pdf"
+              disabled={pdfDisabled}
               style={{ backgroundColor: pdfDisabled ? 'var(--slate-200)' : 'var(--medical-600)', cursor: pdfDisabled ? 'not-allowed' : 'pointer', color: pdfDisabled ? 'var(--slate-400)' : '#fff', marginTop: '1rem' }}
               onClick={handlePdfClick}
             >
               <i className="fa-solid fa-file-pdf"></i> Generar Reporte PDF
             </button>
 
-            <button 
+            <button
               type="button"
-              className="btn-pdf" 
-              disabled={pdfDisabled} 
+              className="btn-pdf"
+              disabled={pdfDisabled}
               style={{ backgroundColor: pdfDisabled ? 'var(--slate-200)' : '#059669', cursor: pdfDisabled ? 'not-allowed' : 'pointer', color: '#fff', marginTop: '0.5rem' }}
               onClick={guardarEvaluacionBD}
             >
