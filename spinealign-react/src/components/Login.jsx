@@ -6,14 +6,39 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      localStorage.setItem('token', 'fake-jwt-token-valido-2026');
-      alert("¡Inicio de sesión exitoso! Bienvenido, " + email);
-      window.location.href = '/evaluar';
-    } else {
+    if (!email || !password) {
       alert("Por favor, completa todos los campos.");
+      return;
+    }
+
+    try {
+      // Petición real a tu server.js en el puerto 3000
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ correo: email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Guardamos el token y el correo reales devueltos por MongoDB
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('correo', data.correo);
+        
+        alert(`¡Bienvenido de nuevo, ${data.nombre}!`);
+        window.location.href = '/evaluar';
+      } else {
+        // Muestra el error exacto que bota el servidor (ej: contraseña incorrecta)
+        alert(`Error al iniciar sesión: ${data.error || 'Credenciales inválidas'}`);
+      }
+    } catch (error) {
+      console.error("Error de conexión:", error);
+      alert("No se pudo conectar con el servidor backend. Asegúrate de que node server.js esté corriendo.");
     }
   };
 

@@ -56,6 +56,66 @@ export default function Evaluar() {
     }
   };
 
+  // ==========================================
+  // FUNCIÓN PARA GUARDAR EVALUACIÓN Y FOTO EN MONGODB
+  // ==========================================
+  const guardarEvaluacionBD = async () => {
+    const sesionActiva = localStorage.getItem('token');
+
+    let correoUsuario = localStorage.getItem('correo') || 
+                          localStorage.getItem('email') || 
+                          localStorage.getItem('usuarioCorreo') ||
+                          localStorage.getItem('userEmail');
+
+    if (!correoUsuario && sesionActiva && sesionActiva.includes('.')) {
+      try {
+        const payloadBase64 = sesionActiva.split('.')[1];
+        const decodedPayload = JSON.parse(atob(payloadBase64));
+        correoUsuario = decodedPayload.correo || decodedPayload.email || decodedPayload.sub;
+      } catch (e) {
+        console.error("No se pudo decodificar el token:", e);
+      }
+    }
+
+    if (!sesionActiva || !correoUsuario) {
+      alert("No se encontró una sesión activa o el correo del usuario. Por favor, inicia sesión nuevamente.");
+      window.location.href = '/login';
+      return;
+    }
+
+    const anguloNum = parseFloat(angVal.replace('°', '')) || 0;
+    const asiNum = parseFloat(asiVal.replace('%', '')) || 0;
+    
+    // Obtenemos la fotografía actual en Base64 desde el visor interactivo
+    const imagenSrc = imagenAnalisisRef.current ? imagenAnalisisRef.current.src : '';
+
+    try {
+      const response = await fetch('http://localhost:3000/api/evaluacion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          correo: correoUsuario,
+          anguloBiacromial: anguloNum,
+          indiceAsimetria: asiNum,
+          imagenUrl: imagenSrc // <-- Envía la foto de la espalda al servidor
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("¡Evaluación y fotografía guardadas exitosamente en el historial!");
+        window.location.href = '/historial'; 
+      } else {
+        alert(`Error al guardar: ${data.error || 'No se pudo procesar'}`);
+      }
+    } catch (error) {
+      console.error("Error de conexión:", error);
+      alert("Error al conectar con el servidor backend.");
+    }
+  };
+
   const activarCamara = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -284,7 +344,6 @@ export default function Evaluar() {
     }
   };
 
-  // Configurar eventos de arrastre para los puntos
   useEffect(() => {
     let elementoArrastrando = null;
 
@@ -349,6 +408,7 @@ export default function Evaluar() {
       <main className="evaluacion-layout">
         <section className="panel-izquierdo">
           <div className="reporte-header-pdf" style={{ display: 'none' }}>
+            <img src="/src/assets/img/iotipo-.png" alt="Logo SpineAlign" style={{ width: '80px', marginBottom: '0.25rem' }} />
             <h1>SpineAlign - Reporte Clínico Postural</h1>
             <p>Sistema de Análisis Biomecánico Computarizado</p>
           </div>
@@ -432,15 +492,27 @@ export default function Evaluar() {
               </div>
             </div>
 
+            {/* BOTÓN DE GENERAR REPORTE PDF */}
             <button 
               id="btn-descargar-pdf" 
               ref={btnPdfRef} 
               className="btn-pdf" 
               disabled={pdfDisabled} 
-              style={{ backgroundColor: pdfDisabled ? 'var(--slate-200)' : 'var(--medical-600)', cursor: pdfDisabled ? 'not-allowed' : 'pointer', color: pdfDisabled ? 'var(--slate-400)' : '#fff' }}
+              style={{ backgroundColor: pdfDisabled ? 'var(--slate-200)' : 'var(--medical-600)', cursor: pdfDisabled ? 'not-allowed' : 'pointer', color: pdfDisabled ? 'var(--slate-400)' : '#fff', marginTop: '1rem' }}
               onClick={handlePdfClick}
             >
               <i className="fa-solid fa-file-pdf"></i> Generar Reporte PDF
+            </button>
+
+            {/* BOTÓN: GUARDAR EVALUACIÓN EN MONGODB */}
+            <button 
+              type="button"
+              className="btn-pdf" 
+              disabled={pdfDisabled} 
+              style={{ backgroundColor: pdfDisabled ? 'var(--slate-200)' : '#059669', cursor: pdfDisabled ? 'not-allowed' : 'pointer', color: '#fff', marginTop: '0.5rem' }}
+              onClick={guardarEvaluacionBD}
+            >
+              <i className="fa-solid fa-floppy-disk"></i> Guardar Evaluación en Historial
             </button>
           </div>
         </section>
@@ -452,8 +524,8 @@ export default function Evaluar() {
               <p>Activa la cámara o sube una fotografía para iniciar el análisis interactivo</p>
             </div>
 
-            <video id="webcam-video" ref={videoWebcamRef} autoPlay playsInline style={{ display: 'none', maxWidth: '100%', maxHeight: '600px', objectFit: 'contain' }}></video>
-            <img id="imagen-analisis" ref={imagenAnalisisRef} alt="Evaluación Postural" style={{ display: 'none' }} />
+            <video id="webcam-video" ref={videoWebcamRef} autoPlay playsInline style={{ display: 'none', width: '100%', height: '100%', objectFit: 'contain' }}></video>
+            <img id="imagen-analisis" ref={imagenAnalisisRef} alt="Evaluación Postural" style={{ display: 'none', width: '100%', height: '100%', objectFit: 'contain' }} />
 
             <svg id="svg-conexion" ref={svgConexionRef} className="svg-linea" style={{ display: 'none' }}>
               <line id="ref-vertical-ideal" ref={refVerticalIdealRef} x1="0" y1="0" x2="0" y2="0" className="linea-referencia-ideal" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="4,4" />

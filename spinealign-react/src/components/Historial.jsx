@@ -1,3 +1,4 @@
+// src/components/Historial.jsx
 import React, { useEffect, useState } from 'react';
 import '../assets/css/styleevaluar.css';
 import '../assets/css/historial.css';
@@ -8,7 +9,7 @@ export default function Historial() {
 
   useEffect(() => {
     const sesionActiva = localStorage.getItem('token');
-    const correoUsuario = localStorage.getItem('correo'); // El correo guardado al iniciar sesión
+    const correoUsuario = localStorage.getItem('correo');
     const navLoginBtn = document.getElementById('nav-login-btn');
     
     if (sesionActiva && navLoginBtn) {
@@ -16,34 +17,35 @@ export default function Historial() {
       navLoginBtn.href = "#";
     }
 
-    // Consultar el historial real desde el backend
     if (correoUsuario) {
       fetch(`http://localhost:3000/api/historial/${correoUsuario}`)
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
-            // Mapear los datos de MongoDB al formato que usa tu tabla
             const datosFormateados = data.map((item, index) => {
               const anguloVal = item.anguloBiacromial || 0;
-              // Lógica de ejemplo para clasificar el estado clínico según el ángulo
               let estado = 'Normal / Fisiológica';
               let badge = 'badge-normal';
-              if (anguloVal > 3 && anguloVal <= 6) {
+              if (anguloVal >= 7.0) {
+                estado = 'Severa / Atención Prioritaria';
+                badge = 'badge-alerta';
+              } else if (anguloVal >= 4.5) {
+                estado = 'Moderada / Tratamiento Recomendado';
+                badge = 'badge-alerta';
+              } else if (anguloVal >= 2.0) {
                 estado = 'Leve / Monitoreo';
                 badge = 'badge-moderado';
-              } else if (anguloVal > 6) {
-                estado = 'Severa / Prioritaria';
-                badge = 'badge-alerta';
               }
 
               return {
                 id: `PX-2026-0${index + 1}`,
-                nombre: 'Paciente Registrado', // O el nombre del usuario logueado
+                nombre: 'Paciente Registrado',
                 fecha: new Date(item.fecha).toLocaleDateString(),
                 angulo: `${anguloVal}°`,
                 asi: `${item.indiceAsimetria || 0}%`,
                 estado: estado,
-                badge: badge
+                badge: badge,
+                imagenUrl: item.imagenUrl || '' // <-- Captura la foto almacenada en MongoDB
               };
             });
             setFilas(datosFormateados);
@@ -53,8 +55,83 @@ export default function Historial() {
     }
   }, []);
 
-  const verDetalle = (idPaciente) => {
-    alert(`Abriendo el expediente y reporte clínico guardado para el paciente: ${idPaciente}`);
+  const verDetalle = (fila) => {
+    const ventanaReporte = window.open('', '_blank', 'width=850,height=750');
+    ventanaReporte.document.write(`
+      <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>Reporte Clínico Postural - ${fila.id} | SpineAlign</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; }
+            .header { text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px; }
+            .info { display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8fafc; padding: 12px 15px; border-radius: 8px; font-size: 14px; }
+            .metricas { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+            .caja { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; text-align: center; background: #fff; }
+            .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+            .badge-normal { background: #dcfce7; color: #166534; }
+            .badge-moderado { background: #fef9c3; color: #854d0e; }
+            .badge-alerta { background: #fee2e2; color: #991b1b; }
+            .seccion-foto { text-align: center; margin-bottom: 20px; }
+            .foto-contenedor { width: 100%; max-width: 320px; margin: 10px auto; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #000; }
+            .foto-contenedor img { width: 100%; height: auto; display: block; object-fit: contain; }
+            .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+            @media print {
+              .no-print { display: none; }
+              body { padding: 10px; }
+            }
+          </style>
+        </head>
+        <body>
+          <header class="header">
+            <h1 style="margin: 0 0 5px 0; font-size: 22px;">SpineAlign - Expediente Clínico Postural</h1>
+            <p style="margin: 0; color: #64748b; font-size: 13px;">Sistema de Análisis Biomecánico Computarizado</p>
+          </header>
+          <main>
+            <section class="info">
+              <div><strong>ID:</strong> ${fila.id}</div>
+              <div><strong>Paciente:</strong> ${fila.nombre}</div>
+              <div><strong>Fecha:</strong> ${fila.fecha}</div>
+            </section>
+
+            <section class="metricas">
+              <div class="caja">
+                <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #475569;">Ángulo Bi-Acromial</h3>
+                <p style="font-size: 20px; font-weight: bold; color: #0284c7; margin: 0;">${fila.angulo}</p>
+              </div>
+              <div class="caja">
+                <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #475569;">Índice ASI</h3>
+                <p style="font-size: 20px; font-weight: bold; color: #0284c7; margin: 0;">${fila.asi}</p>
+              </div>
+            </section>
+
+            <section style="text-align: center; margin-bottom: 20px;">
+              <span class="badge ${fila.badge}">${fila.estado}</span>
+            </section>
+
+            ${fila.imagenUrl ? `
+              <section class="seccion-foto">
+                <h3 style="font-size: 14px; margin-bottom: 5px; color: #475569;">Fotografía de la Evaluación Postural</h3>
+                <div class="foto-contenedor">
+                  <img src="${fila.imagenUrl}" alt="Fotografía del paciente analizada" />
+                </div>
+              </section>
+            ` : `
+              <p style="text-align: center; color: #94a3b8; font-size: 13px;">No hay fotografía adjunta en este registro.</p>
+            `}
+
+            <div style="text-align: center;" class="no-print">
+              <button onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 15px; cursor: pointer; font-weight: bold;">Imprimir / Guardar como PDF</button>
+            </div>
+          </main>
+          <footer class="footer">
+            <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
+            <p>© 2026 SpineAlign - Todos los derechos reservados</p>
+          </footer>
+        </body>
+      </html>
+    `);
+    ventanaReporte.document.close();
   };
 
   const filasFiltradas = filas.filter(f => 
@@ -66,9 +143,9 @@ export default function Historial() {
     <div className="spine-historial-container">
       <header className="barra-navegacion">
         <a href="/">
-          <img src="/src/assets/img/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
+          <img src="/src/assets/img/iotipo-.png" alt="Logotipo oficial de SpineAlign" className="logo" />
         </a>
-        <nav className="menu-derecha" aria-label="Principal">
+        <nav className="menu-derecha" aria-label="Menú principal de navegación">
           <a href="/">Inicio</a>
           <a href="/evaluar">Nueva Evaluación</a>
           <a href="/login" className="boton-login" id="nav-login-btn">Iniciar sesión</a>
@@ -76,29 +153,31 @@ export default function Historial() {
       </header>
 
       <main className="historial-container">
-        <div className="historial-header">
-          <h2>Historial de Evaluaciones Clínicas</h2>
+        <section className="historial-header">
+          <h1>Historial de Evaluaciones Clínicas Posturales</h1>
+          <label htmlFor="buscador-historial" className="sr-only">Buscar por paciente o ID</label>
           <input 
             type="text" 
-            id="buscador" 
+            id="buscador-historial" 
             className="buscador-historial" 
             placeholder="Buscar por paciente o ID..." 
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
+            aria-label="Campo de búsqueda de evaluaciones clínicas"
           />
-        </div>
+        </section>
 
-        <div className="tabla-tarjeta">
+        <section className="tabla-tarjeta" aria-label="Tabla de resultados de evaluaciones">
           <table className="tabla-datos">
             <thead>
               <tr>
-                <th>ID / H. Clínica</th>
-                <th>Paciente</th>
-                <th>Fecha</th>
-                <th>Ángulo Bi-Acromial</th>
-                <th>Índice ASI</th>
-                <th>Estado Clínico</th>
-                <th>Acciones</th>
+                <th scope="col">ID / H. Clínica</th>
+                <th scope="col">Paciente</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Ángulo Bi-Acromial</th>
+                <th scope="col">Índice ASI</th>
+                <th scope="col">Estado Clínico</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="tabla-cuerpo">
@@ -107,13 +186,17 @@ export default function Historial() {
                   <tr key={index}>
                     <td>{fila.id}</td>
                     <td><strong>{fila.nombre}</strong></td>
-                    <td>{fila.fecha}</td>
+                    <td><time dateTime={fila.fecha}>{fila.fecha}</time></td>
                     <td>{fila.angulo}</td>
                     <td>{fila.asi}</td>
                     <td><span className={`badge-estado ${fila.badge}`}>{fila.estado}</span></td>
                     <td>
-                      <button className="btn-accion-tabla" onClick={() => verDetalle(fila.id)}>
-                        <i className="fa-solid fa-eye"></i> Ver
+                      <button 
+                        className="btn-accion-tabla" 
+                        onClick={() => verDetalle(fila)}
+                        aria-label={`Ver detalles y reporte PDF del paciente ${fila.id}`}
+                      >
+                        <i className="fa-solid fa-eye" aria-hidden="true"></i> Ver
                       </button>
                     </td>
                   </tr>
@@ -127,10 +210,10 @@ export default function Historial() {
               )}
             </tbody>
           </table>
-        </div>
+        </section>
       </main>
 
-      <footer>
+      <footer role="contentinfo">
         <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
         <p className="copyright">© 2026 SpineAlign - Todos los derechos reservados</p>
       </footer>

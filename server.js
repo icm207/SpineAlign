@@ -6,8 +6,8 @@ const cors = require('cors');
 const app = express();
 
 // Middlewares
-app.use(express.json()); // Permite recibir datos en formato JSON
-app.use(cors());         // Permite la conexión con el frontend
+app.use(express.json({ limit: '10mb' })); // Aumentamos el límite de tamaño para permitir imágenes en Base64
+app.use(cors());                          // Permite la conexión con el frontend
 
 // ==========================================
 // 1. ESQUEMA Y MODELO DE USUARIO
@@ -15,7 +15,8 @@ app.use(cors());         // Permite la conexión con el frontend
 const evaluacionSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now },
     anguloBiacromial: { type: Number },
-    indiceAsimetria: { type: Number }
+    indiceAsimetria: { type: Number },
+    imagenUrl: { type: String } // <-- Campo añadido para guardar la foto de la espalda (Base64)
 });
 
 const usuarioSchema = new mongoose.Schema({
@@ -49,9 +50,9 @@ app.get('/', (req, res) => {
 app.post('/api/registro', async (req, res) => {
     try {
         const { nombre, edad, correo, sexo, altura, peso, password } = req.body;
-        
+
         // Verificar si el usuario ya existe con ese correo
-        const usuarioExistente = await Usuario.findOne({ correo });
+        const usuarioExistente = await Usuario.findOne({ correo: correo.trim().toLowerCase() });
         if (usuarioExistente) {
             return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
         }
@@ -61,17 +62,17 @@ app.post('/api/registro', async (req, res) => {
         const passwordEncriptada = await bcrypt.hash(password, salt);
 
         // Crear y guardar el nuevo usuario en MongoDB
-        const nuevoUsuario = new Usuario({ 
-            nombre, 
-            edad, 
-            correo, 
-            sexo, 
-            altura, 
-            peso, 
+        const nuevoUsuario = new Usuario({
+            nombre,
+            edad,
+            correo: correo.trim().toLowerCase(),
+            sexo,
+            altura,
+            peso,
             password: passwordEncriptada,
             historialEvaluaciones: []
         });
-        
+
         await nuevoUsuario.save();
 
         res.status(201).json({ mensaje: '¡Usuario registrado con éxito en MongoDB!' });
@@ -82,32 +83,60 @@ app.post('/api/registro', async (req, res) => {
 });
 
 // ==========================================
-// 4. INICIAR EL SERVIDOR
+// 3.1. RUTA DE LOGIN REAL (POST /api/login)
 // ==========================================
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+app.post('/api/login', async (req, res) => {
+    try {
+        const { correo, password } = req.body;
+
+        const usuario = await Usuario.findOne({ correo: correo.trim().toLowerCase() });
+        if (!usuario) {
+            return res.status(400).json({ error: 'Correo o contraseña incorrectos.' });
+        }
+
+        const passwordMatch = await bcrypt.compare(password, usuario.password);
+        if (!passwordMatch) {
+            return res.status(400).json({ error: 'Correo o contraseña incorrectos.' });
+        }
+
+        res.json({ 
+            mensaje: 'Login exitoso', 
+            token: 'jwt-token-valido-spinealign-2026',
+            correo: usuario.correo,
+            nombre: usuario.nombre 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en el servidor al iniciar sesión.' });
+    }
 });
+
 // ==========================================
 // RUTA PARA GUARDAR UNA EVALUACIÓN EN EL HISTORIAL
 // ==========================================
 app.post('/api/evaluacion', async (req, res) => {
     try {
-        const { correo, anguloBiacromial, indiceAsimetria } = req.body;
-        
-        const usuario = await Usuario.findOne({ correo });
-        if (!usuario) {
-            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        const { correo, anguloBiacromial, indiceAsimetria, imagenUrl } = req.body;
+
+        if (!correo) {
+            return res.status(400).json({ error: 'Correo no proporcionado.' });
         }
 
-        // Agregar la nueva evaluación al arreglo
+        // Buscamos el usuario ignorando mayúsculas/minúsculas y espacios
+        const usuario = await Usuario.findOne({ correo: { $regex: new RegExp(`^${correo.trim()}$`, 'i') } });
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado en la base de datos.' });
+        }
+
+        // Agregar la nueva evaluación al arreglo incluyendo la fotografía
         usuario.historialEvaluaciones.push({
             anguloBiacromial,
-            indiceAsimetria
+            indiceAsimetria,
+            imagenUrl
         });
 
         await usuario.save();
-        res.status(201).json({ mensaje: '¡Evaluación guardada en el historial con éxito!' });
+        res.status(201).json({ mensaje: '¡Evaluación y fotografía guardadas en el historial con éxito!' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al guardar la evaluación.' });
@@ -120,8 +149,8 @@ app.post('/api/evaluacion', async (req, res) => {
 app.get('/api/historial/:correo', async (req, res) => {
     try {
         const { correo } = req.params;
-        const usuario = await Usuario.findOne({ correo });
-        
+        const usuario = await Usuario.findOne({ correo: { $regex: new RegExp(`^${correo.trim()}$`, 'i') } });
+
         if (!usuario) {
             return res.status(404).json({ error: 'Usuario no encontrado.' });
         }
@@ -131,4 +160,12 @@ app.get('/api/historial/:correo', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener el historial.' });
     }
+});
+
+// ==========================================
+// 4. INICIAR EL SERVIDOR
+// ==========================================
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

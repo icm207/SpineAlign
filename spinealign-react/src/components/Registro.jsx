@@ -11,14 +11,40 @@ export default function Registro() {
   const [peso, setPeso] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (nombre && email && edad && sexo && altura && peso && password) {
-      const datosUsuario = { nombre, email, edad, sexo, altura, peso, password };
-      console.log("Datos listos para enviar al backend:", datosUsuario);
-      
-      alert("¡Cuenta creada exitosamente para " + nombre + "! Ahora puedes iniciar sesión.");
-      window.location.href = '/login';
+      try {
+        // Hacemos la petición real al servidor backend en el puerto 3000
+        const response = await fetch('http://localhost:3000/api/registro', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          // Mapeamos 'email' a 'correo' para que coincida exactamente con el server.js y MongoDB
+          body: JSON.stringify({
+            nombre,
+            correo: email,
+            edad: Number(edad),
+            sexo,
+            altura: Number(altura),
+            peso: Number(peso),
+            password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(`¡Cuenta creada exitosamente para ${nombre} en MongoDB Atlas! Ahora puedes iniciar sesión.`);
+          window.location.href = '/login';
+        } else {
+          alert(`Error al registrarse: ${data.error || 'No se pudo completar el registro'}`);
+        }
+      } catch (error) {
+        console.error("Error de conexión:", error);
+        alert("No se pudo conectar con el servidor backend. Asegúrate de que node server.js esté corriendo.");
+      }
     } else {
       alert("Por favor, completa todos los campos del formulario.");
     }
