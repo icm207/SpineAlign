@@ -1,88 +1,184 @@
-/* ===== Estilos para la página de Historial y Tablas ===== */
+/* ==========================================
+   ESTILOS MODERNOS PARA EL HISTORIAL - SPINEALIGN
+   ================================---------- */
 
-.contenedor-ancho {
-    max-width: 1000px !important;
+:root {
+  --medical-600: #0284c7;
+  --medical-700: #0369a1;
+  --medical-900: #0c4a6e;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-400: #94a3b8;
+  --slate-600: #475569;
+  --slate-800: #1e293b;
 }
 
-.tabla-contenedor {
-    width: 100%;
-    overflow-x: auto;
-    margin: 1.5rem 0;
-    border-radius: 12px;
-    border: 1px solid var(--borde-suave);
+/* Contenedor principal de la vista de historial */
+.spine-historial-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--slate-50);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--slate-800);
 }
 
-.tabla-historial {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: 0.95rem;
-    background-color: var(--color-blanco);
+/* Contenedor centralizado del historial */
+.historial-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+  flex: 1;
+  box-sizing: border-box;
 }
 
-.tabla-historial th {
-    background-color: rgba(67, 67, 176, 0.06);
-    color: var(--color-primario);
-    font-weight: 600;
-    padding: 1rem;
-    border-bottom: 2px solid var(--borde-suave);
+/* Encabezado del historial (Título y buscador) */
+.historial-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.tabla-historial td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--borde-suave);
-    color: var(--color-texto);
+.historial-header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--medical-900);
+  margin-bottom: 1rem;
+  letter-spacing: -0.025em;
 }
 
-.tabla-historial tr:last-child td {
-    border-bottom: none;
+/* Buscador estilizado y centrado */
+.buscador-historial {
+  width: 100%;
+  max-width: 450px;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--slate-200);
+  border-radius: 9999px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  outline: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0.85rem center;
+  background-size: 1.1rem;
 }
 
-.tabla-historial tr:hover {
-    background-color: rgba(67, 67, 176, 0.02);
+.buscador-historial:focus {
+  border-color: var(--medical-600);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-/* Insignias de estado (Badges) */
-.badge {
-    padding: 0.35rem 0.75rem;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    display: inline-block;
+/* Tarjeta contenedora de la tabla */
+.tabla-tarjeta {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--slate-200);
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
-.badge.success {
-    background-color: #d1fae5;
-    color: #065f46;
+/* Estilos de la tabla centrada */
+.tabla-datos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
 }
 
-.badge.warning {
-    background-color: #fef3c7;
-    color: #92400e;
+.tabla-datos th {
+  background-color: var(--slate-100);
+  color: var(--slate-600);
+  font-weight: 600;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--slate-200);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
-.badge.danger {
-    background-color: #fee2e2;
-    color: #991b1b;
+.tabla-datos td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--slate-200);
+  color: var(--slate-800);
+  vertical-align: middle;
 }
 
-/* Botón dentro de la tabla */
-.btn-tabla {
-    color: var(--color-primario);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.3rem 0.6rem;
-    border-radius: 6px;
-    transition: background-color 0.2s ease;
+.tabla-datos tbody tr {
+  transition: background-color 0.15s ease;
 }
 
-.btn-tabla:hover {
-    background-color: rgba(67, 67, 176, 0.1);
-    text-decoration: underline;
+.tabla-datos tbody tr:hover {
+  background-color: var(--slate-550, #f8fafc);
 }
 
-.acciones-historial {
-    text-align: center;
-    margin-top: 2rem;
+.tabla-datos tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Badges de Estado Clínico modernizados */
+.badge-estado {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.025em;
+}
+
+.badge-normal {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-moderado {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.badge-alerta {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* Botón de acción ("Ver") en la tabla */
+.btn-accion-tabla {
+  background-color: var(--medical-600);
+  color: #ffffff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.btn-accion-tabla:hover {
+  background-color: var(--medical-700);
+}
+
+.btn-accion-tabla:active {
+  transform: scale(0.97);
+}
+
+/* Clases de utilidad para accesibilidad */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

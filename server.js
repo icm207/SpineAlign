@@ -16,7 +16,7 @@ const evaluacionSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now },
     anguloBiacromial: { type: Number },
     indiceAsimetria: { type: Number },
-    imagenUrl: { type: String } // <-- Campo añadido para guardar la foto de la espalda (Base64)
+    imagenUrl: { type: String } // Guarda la foto de la espalda con los puntos (Base64)
 });
 
 const usuarioSchema = new mongoose.Schema({
@@ -122,13 +122,11 @@ app.post('/api/evaluacion', async (req, res) => {
             return res.status(400).json({ error: 'Correo no proporcionado.' });
         }
 
-        // Buscamos el usuario ignorando mayúsculas/minúsculas y espacios
         const usuario = await Usuario.findOne({ correo: { $regex: new RegExp(`^${correo.trim()}$`, 'i') } });
         if (!usuario) {
             return res.status(404).json({ error: 'Usuario no encontrado en la base de datos.' });
         }
 
-        // Agregar la nueva evaluación al arreglo incluyendo la fotografía
         usuario.historialEvaluaciones.push({
             anguloBiacromial,
             indiceAsimetria,
@@ -144,9 +142,43 @@ app.post('/api/evaluacion', async (req, res) => {
 });
 
 // ==========================================
-// RUTA PARA OBTENER EL HISTORIAL DE UN USUARIO
+// RUTA PARA OBTENER EL HISTORIAL DE UN USUARIO (CON DATOS PERSONALES)
 // ==========================================
 app.get('/api/historial/:correo', async (req, res) => {
+    try {
+        const { correo } = req.params;
+        const correoLimpio = correo.trim();
+
+        const usuario = await Usuario.findOne({ correo: { $regex: new RegExp(`^${correoLimpio}$`, 'i') } });
+
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado.' });
+        }
+
+        const historialConDatos = usuario.historialEvaluaciones.map(item => ({
+            _id: item._id,
+            fecha: item.fecha,
+            anguloBiacromial: item.anguloBiacromial,
+            indiceAsimetria: item.indiceAsimetria,
+            imagenUrl: item.imagenUrl,
+            nombre: usuario.nombre || "Paciente General",
+            edad: usuario.edad || "--",
+            sexo: usuario.sexo || "--",
+            estatura: usuario.altura ? `${usuario.altura} cm` : "--",
+            peso: usuario.peso ? `${usuario.peso} kg` : "--"
+        }));
+
+        res.json(historialConDatos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener el historial.' });
+    }
+});
+
+// ==========================================
+// RUTA PARA OBTENER LOS DATOS DEL PACIENTE
+// ==========================================
+app.get('/api/usuario/:correo', async (req, res) => {
     try {
         const { correo } = req.params;
         const usuario = await Usuario.findOne({ correo: { $regex: new RegExp(`^${correo.trim()}$`, 'i') } });
@@ -155,10 +187,17 @@ app.get('/api/historial/:correo', async (req, res) => {
             return res.status(404).json({ error: 'Usuario no encontrado.' });
         }
 
-        res.json(usuario.historialEvaluaciones);
+        res.json({
+            nombre: usuario.nombre,
+            edad: usuario.edad,
+            correo: usuario.correo,
+            sexo: usuario.sexo,
+            altura: usuario.altura,
+            peso: usuario.peso
+        });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al obtener el historial.' });
+        res.status(500).json({ error: 'Error al obtener el usuario.' });
     }
 });
 

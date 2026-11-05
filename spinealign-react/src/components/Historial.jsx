@@ -9,7 +9,11 @@ export default function Historial() {
 
   useEffect(() => {
     const sesionActiva = localStorage.getItem('token');
-    const correoUsuario = localStorage.getItem('correo');
+    let correoUsuario = localStorage.getItem('correo') || 
+                          localStorage.getItem('email') || 
+                          localStorage.getItem('usuarioCorreo') ||
+                          localStorage.getItem('userEmail');
+
     const navLoginBtn = document.getElementById('nav-login-btn');
     
     if (sesionActiva && navLoginBtn) {
@@ -18,7 +22,7 @@ export default function Historial() {
     }
 
     if (correoUsuario) {
-      fetch(`http://localhost:3000/api/historial/${correoUsuario}`)
+      fetch(`http://localhost:3000/api/historial/${correoUsuario.trim()}`)
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
@@ -39,13 +43,17 @@ export default function Historial() {
 
               return {
                 id: `PX-2026-0${index + 1}`,
-                nombre: 'Paciente Registrado',
+                nombre: item.nombre || 'Paciente General',
+                edad: item.edad || '--',
+                sexo: item.sexo || '--',
+                estatura: item.estatura || '--',
+                peso: item.peso || '--',
                 fecha: new Date(item.fecha).toLocaleDateString(),
                 angulo: `${anguloVal}°`,
                 asi: `${item.indiceAsimetria || 0}%`,
                 estado: estado,
                 badge: badge,
-                imagenUrl: item.imagenUrl || '' // <-- Captura la foto almacenada en MongoDB
+                imagenUrl: item.imagenUrl || ''
               };
             });
             setFilas(datosFormateados);
@@ -56,7 +64,7 @@ export default function Historial() {
   }, []);
 
   const verDetalle = (fila) => {
-    const ventanaReporte = window.open('', '_blank', 'width=850,height=750');
+    const ventanaReporte = window.open('', '_blank', 'width=850,height=800');
     ventanaReporte.document.write(`
       <html lang="es">
         <head>
@@ -65,7 +73,7 @@ export default function Historial() {
           <style>
             body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; }
             .header { text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px; }
-            .info { display: flex; justify-content: space-between; margin-bottom: 20px; background: #f8fafc; padding: 12px 15px; border-radius: 8px; font-size: 14px; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; font-size: 13px; }
             .metricas { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
             .caja { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; text-align: center; background: #fff; }
             .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
@@ -73,7 +81,7 @@ export default function Historial() {
             .badge-moderado { background: #fef9c3; color: #854d0e; }
             .badge-alerta { background: #fee2e2; color: #991b1b; }
             .seccion-foto { text-align: center; margin-bottom: 20px; }
-            .foto-contenedor { width: 100%; max-width: 320px; margin: 10px auto; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #000; }
+            .foto-contenedor { width: 100%; max-width: 400px; margin: 10px auto; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #000; }
             .foto-contenedor img { width: 100%; height: auto; display: block; object-fit: contain; }
             .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; }
             @media print {
@@ -88,10 +96,14 @@ export default function Historial() {
             <p style="margin: 0; color: #64748b; font-size: 13px;">Sistema de Análisis Biomecánico Computarizado</p>
           </header>
           <main>
-            <section class="info">
-              <div><strong>ID:</strong> ${fila.id}</div>
+            <section class="info-grid">
               <div><strong>Paciente:</strong> ${fila.nombre}</div>
-              <div><strong>Fecha:</strong> ${fila.fecha}</div>
+              <div><strong>ID Historia:</strong> ${fila.id}</div>
+              <div><strong>Edad:</strong> ${fila.edad} años</div>
+              <div><strong>Sexo:</strong> ${fila.sexo}</div>
+              <div><strong>Estatura:</strong> ${fila.estatura}</div>
+              <div><strong>Peso:</strong> ${fila.peso}</div>
+              <div style="grid-column: span 2;"><strong>Fecha de Evaluación:</strong> ${fila.fecha}</div>
             </section>
 
             <section class="metricas">
@@ -111,9 +123,9 @@ export default function Historial() {
 
             ${fila.imagenUrl ? `
               <section class="seccion-foto">
-                <h3 style="font-size: 14px; margin-bottom: 5px; color: #475569;">Fotografía de la Evaluación Postural</h3>
+                <h3 style="font-size: 14px; margin-bottom: 5px; color: #475569;">Análisis Postural con Puntos de Referencia</h3>
                 <div class="foto-contenedor">
-                  <img src="${fila.imagenUrl}" alt="Fotografía del paciente analizada" />
+                  <img src="${fila.imagenUrl}" alt="Análisis postural con puntos" />
                 </div>
               </section>
             ` : `

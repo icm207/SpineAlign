@@ -1,10 +1,12 @@
 // src/components/Evaluar.jsx
 import React, { useEffect, useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import '../assets/css/styleevaluar.css';
 
 export default function Evaluar() {
   const [streamCamara, setStreamCamara] = useState(null);
   const [imagenCargada, setImagenCargada] = useState(false);
+  const [urlImagenCapturada, setUrlImagenCapturada] = useState('');
   
   const videoWebcamRef = useRef(null);
   const imagenAnalisisRef = useRef(null);
@@ -46,19 +48,143 @@ export default function Evaluar() {
     }
   }, []);
 
-  const handlePdfClick = () => {
+  // ==========================================
+  // GENERAR REPORTE PDF CON DATOS DE MONGODB
+  // ==========================================
+  const handlePdfClick = async () => {
     const sesionActiva = localStorage.getItem('token');
-    if (!sesionActiva) {
+    let correoUsuario = localStorage.getItem('correo') || 
+                          localStorage.getItem('email') || 
+                          localStorage.getItem('usuarioCorreo') ||
+                          localStorage.getItem('userEmail');
+
+    if (!sesionActiva || !correoUsuario) {
       alert("Debe iniciar sesión para generar y descargar el reporte clínico en PDF.");
       window.location.href = '/login';
-    } else {
-      window.print();
+      return;
     }
+
+    let datosPaciente = {
+      nombre: "Paciente General",
+      edad: "--",
+      sexo: "--",
+      altura: "--",
+      peso: "--"
+    };
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/usuario/${correoUsuario.trim()}`);
+      if (res.ok) {
+        const dataUser = await res.json();
+        datosPaciente = {
+          nombre: dataUser.nombre || "Paciente General",
+          edad: dataUser.edad !== undefined ? dataUser.edad : "--",
+          sexo: dataUser.sexo || "--",
+          altura: dataUser.altura ? `${dataUser.altura} cm` : "--",
+          peso: dataUser.peso ? `${dataUser.peso} kg` : "--"
+        };
+      }
+    } catch (e) {
+      console.error("Error al obtener los datos del paciente:", e);
+    }
+
+    let imagenVisorUrl = urlImagenCapturada;
+    if (contenedorVisorRef.current) {
+      try {
+        const canvasCaptura = await html2canvas(contenedorVisorRef.current, {
+          useCORS: true,
+          allowTaint: true,
+          scale: 2
+        });
+        imagenVisorUrl = canvasCaptura.toDataURL('image/png');
+      } catch (e) {
+        console.error("Error al capturar el visor para el PDF:", e);
+      }
+    }
+
+    const idPaciente = "PX-2026-01";
+    const fechaActual = new Date().toLocaleDateString();
+
+    const ventanaReporte = window.open('', '_blank', 'width=850,height=800');
+    ventanaReporte.document.write(`
+      <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <title>Reporte Clínico Postural | SpineAlign</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; }
+            .header { text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 15px; margin-bottom: 20px; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; background: #f8fafc; padding: 15px; border-radius: 8px; font-size: 13px; }
+            .metricas { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+            .caja { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; text-align: center; background: #fff; }
+            .badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+            .badge-normal { background: #dcfce7; color: #166534; }
+            .badge-moderado { background: #fef9c3; color: #854d0e; }
+            .badge-alerta { background: #fee2e2; color: #991b1b; }
+            .seccion-foto { text-align: center; margin-bottom: 20px; }
+            .foto-contenedor { width: 100%; max-width: 400px; margin: 10px auto; border: 2px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #000; }
+            .foto-contenedor img { width: 100%; height: auto; display: block; object-fit: contain; }
+            .footer { text-align: center; margin-top: 30px; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+            @media print {
+              .no-print { display: none; }
+              body { padding: 10px; }
+            }
+          </style>
+        </head>
+        <body>
+          <header class="header">
+            <h1 style="margin: 0 0 5px 0; font-size: 22px;">SpineAlign - Expediente Clínico Postural</h1>
+            <p style="margin: 0; color: #64748b; font-size: 13px;">Sistema de Análisis Biomecánico Computarizado</p>
+          </header>
+          <main>
+            <section class="info-grid">
+              <div><strong>Paciente:</strong> ${datosPaciente.nombre}</div>
+              <div><strong>ID Historia:</strong> ${idPaciente}</div>
+              <div><strong>Edad:</strong> ${datosPaciente.edad} años</div>
+              <div><strong>Sexo:</strong> ${datosPaciente.sexo}</div>
+              <div><strong>Estatura:</strong> ${datosPaciente.altura}</div>
+              <div><strong>Peso:</strong> ${datosPaciente.peso}</div>
+              <div style="grid-column: span 2;"><strong>Fecha de Evaluación:</strong> ${fechaActual}</div>
+            </section>
+
+            <section class="metricas">
+              <div class="caja">
+                <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #475569;">Ángulo Bi-Acromial</h3>
+                <p style="font-size: 20px; font-weight: bold; color: #0284c7; margin: 0;">${angVal}</p>
+              </div>
+              <div class="caja">
+                <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #475569;">Índice ASI</h3>
+                <p style="font-size: 20px; font-weight: bold; color: #0284c7; margin: 0;">${asiVal}</p>
+              </div>
+            </section>
+
+            <section style="text-align: center; margin-bottom: 20px;">
+              <span class="badge ${badgeClass}">${badgeText}</span>
+            </section>
+
+            ${imagenVisorUrl ? `
+              <section class="seccion-foto">
+                <h3 style="font-size: 14px; margin-bottom: 5px; color: #475569;">Análisis Postural con Puntos de Referencia</h3>
+                <div class="foto-contenedor">
+                  <img src="${imagenVisorUrl}" alt="Análisis postural con puntos" />
+                </div>
+              </section>
+            ` : ''}
+
+            <div style="text-align: center;" class="no-print">
+              <button onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 15px; cursor: pointer; font-weight: bold;">Imprimir / Guardar como PDF</button>
+            </div>
+          </main>
+          <footer class="footer">
+            <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
+            <p>© 2026 SpineAlign - Todos los derechos reservados</p>
+          </footer>
+        </body>
+      </html>
+    `);
+    ventanaReporte.document.close();
   };
 
-  // ==========================================
-  // FUNCIÓN PARA GUARDAR EVALUACIÓN Y FOTO EN MONGODB
-  // ==========================================
   const guardarEvaluacionBD = async () => {
     const sesionActiva = localStorage.getItem('token');
 
@@ -85,11 +211,19 @@ export default function Evaluar() {
 
     const anguloNum = parseFloat(angVal.replace('°', '')) || 0;
     const asiNum = parseFloat(asiVal.replace('%', '')) || 0;
-    
-    // Obtenemos la fotografía actual en Base64 desde el visor interactivo
-    const imagenSrc = imagenAnalisisRef.current ? imagenAnalisisRef.current.src : '';
 
     try {
+      let imagenFinalUrl = urlImagenCapturada;
+
+      if (contenedorVisorRef.current) {
+        const canvasCaptura = await html2canvas(contenedorVisorRef.current, {
+          useCORS: true,
+          allowTaint: true,
+          scale: 2
+        });
+        imagenFinalUrl = canvasCaptura.toDataURL('image/png');
+      }
+
       const response = await fetch('http://localhost:3000/api/evaluacion', {
         method: 'POST',
         headers: {
@@ -99,20 +233,20 @@ export default function Evaluar() {
           correo: correoUsuario,
           anguloBiacromial: anguloNum,
           indiceAsimetria: asiNum,
-          imagenUrl: imagenSrc // <-- Envía la foto de la espalda al servidor
+          imagenUrl: imagenFinalUrl
         })
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert("¡Evaluación y fotografía guardadas exitosamente en el historial!");
+        alert("¡Evaluación y análisis visual guardados exitosamente en el historial!");
         window.location.href = '/historial'; 
       } else {
         alert(`Error al guardar: ${data.error || 'No se pudo procesar'}`);
       }
     } catch (error) {
-      console.error("Error de conexión:", error);
-      alert("Error al conectar con el servidor backend.");
+      console.error("Error al generar la captura del visor:", error);
+      alert("Error al procesar la imagen del análisis.");
     }
   };
 
@@ -146,11 +280,14 @@ export default function Evaluar() {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(videoWebcamRef.current, 0, 0, canvas.width, canvas.height);
 
+    const dataUrl = canvas.toDataURL('image/png');
+    setUrlImagenCapturada(dataUrl);
+
     streamCamara.getTracks().forEach(track => track.stop());
     setStreamCamara(null);
 
     if (imagenAnalisisRef.current) {
-      imagenAnalisisRef.current.src = canvas.toDataURL('image/png');
+      imagenAnalisisRef.current.src = dataUrl;
       imagenAnalisisRef.current.style.display = 'block';
     }
     if (videoWebcamRef.current) videoWebcamRef.current.style.display = 'none';
@@ -183,8 +320,11 @@ export default function Evaluar() {
 
     const lector = new FileReader();
     lector.onload = function(event) {
+      const dataUrl = event.target.result;
+      setUrlImagenCapturada(dataUrl);
+
       if (imagenAnalisisRef.current) {
-        imagenAnalisisRef.current.src = event.target.result;
+        imagenAnalisisRef.current.src = dataUrl;
         imagenAnalisisRef.current.style.display = 'block';
       }
       if (videoWebcamRef.current) videoWebcamRef.current.style.display = 'none';
@@ -206,6 +346,7 @@ export default function Evaluar() {
       streamCamara.getTracks().forEach(track => track.stop());
       setStreamCamara(null);
     }
+    setUrlImagenCapturada('');
     if (imagenAnalisisRef.current) imagenAnalisisRef.current.style.display = 'none';
     if (videoWebcamRef.current) videoWebcamRef.current.style.display = 'none';
     if (placeholderVisorRef.current) placeholderVisorRef.current.style.display = 'block';
@@ -407,12 +548,6 @@ export default function Evaluar() {
 
       <main className="evaluacion-layout">
         <section className="panel-izquierdo">
-          <div className="reporte-header-pdf" style={{ display: 'none' }}>
-            <img src="/src/assets/img/iotipo-.png" alt="Logo SpineAlign" style={{ width: '80px', marginBottom: '0.25rem' }} />
-            <h1>SpineAlign - Reporte Clínico Postural</h1>
-            <p>Sistema de Análisis Biomecánico Computarizado</p>
-          </div>
-
           <div className="tarjeta-modulo">
             <h2>Nueva Evaluación</h2>
             <p className="subtitulo-seccion">Usa la cámara o sube una foto, luego arrastra libremente C7, el Manubrium y los hombros.</p>
@@ -492,7 +627,6 @@ export default function Evaluar() {
               </div>
             </div>
 
-            {/* BOTÓN DE GENERAR REPORTE PDF */}
             <button 
               id="btn-descargar-pdf" 
               ref={btnPdfRef} 
@@ -504,7 +638,6 @@ export default function Evaluar() {
               <i className="fa-solid fa-file-pdf"></i> Generar Reporte PDF
             </button>
 
-            {/* BOTÓN: GUARDAR EVALUACIÓN EN MONGODB */}
             <button 
               type="button"
               className="btn-pdf" 
