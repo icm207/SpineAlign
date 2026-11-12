@@ -16,7 +16,8 @@
 
 /* Contenedor principal de la vista de historial */
 .spine-historial-container {
-  min-height: 100vh;
+  min-height: 100vh;   
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background-color: var(--slate-50);
@@ -41,7 +42,7 @@
 }
 
 .historial-header h1 {
-  font-size: 1.85rem;
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
   font-weight: 700;
   color: var(--medical-900);
   margin-bottom: 1rem;
@@ -77,13 +78,14 @@
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--slate-200);
-  overflow: hidden;
+  overflow:auto;
   margin-bottom: 2rem;
 }
 
 /* Estilos de la tabla centrada */
 .tabla-datos {
   width: 100%;
+  min-width: 600px;
   border-collapse: collapse;
   text-align: left;
   font-size: 0.9rem;
@@ -181,4 +183,22 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+   @media (max-width: 600px) { /*Modificacion para pantallas pequeñas(celulares) */
+    .tabla-datos th,
+    .tabla-datos td {
+      padding: 0.75rem 0.75rem;
+    }
+  
+    .historial-container {
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+  }
+  /* Botones más grandes en pantallas táctiles */
+@media (pointer: coarse) {
+  .btn-accion-tabla {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+  }
 }
