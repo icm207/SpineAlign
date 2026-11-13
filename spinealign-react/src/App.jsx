@@ -7,18 +7,25 @@ import Historial from './components/Historial';
 import Login from './components/Login';
 import Registro from './components/Registro';
 import MiCuenta from './components/MiCuenta';
+import SpinyChat from './components/SpinyChat'; // 1. Importa el componente de Spiny
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/evaluar" element={<Evaluar />} />
-        <Route path="/historial" element={<Historial />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/mi-cuenta" element={<MiCuenta />} />
-      </Routes>
+      <div className="relative min-h-screen">
+        {/* Tus rutas existentes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/evaluar" element={<Evaluar />} />
+          <Route path="/historial" element={<Historial />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
+          <Route path="/mi-cuenta" element={<MiCuenta />} />
+        </Routes>
+
+        {/* 2. Spiny flotará en todas las páginas de la app */}
+        <SpinyChat />
+      </div>
     </Router>
   );
 }

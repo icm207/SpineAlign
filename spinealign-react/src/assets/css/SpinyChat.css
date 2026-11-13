@@ -1,0 +1,290 @@
+/* ==========================================
+   SpineAlign - Estilos del Chat de Spiny
+   ========================================== */
+
+.spiny-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Ventana de chat desplegada */
+.spiny-window {
+  margin-bottom: 16px;
+  width: 360px;
+  max-width: 90vw;
+  background-color: #ffffff;
+  color: #1e293b;
+  border-radius: 1.25rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e5f7;
+  display: flex;
+  flex-direction: column;
+  height: 480px;
+  overflow: hidden;
+  animation: spinyFadeIn 0.25s ease-out;
+}
+
+@keyframes spinyFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cabecera del chat con el color institucional de SpineAlign */
+.spiny-header {
+  padding: 1rem;
+  background-color: rgb(67, 67, 176);
+  border-bottom: 1px solid #3b3b9b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #ffffff;
+}
+
+.spiny-header-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.spiny-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.spiny-title h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.spiny-title p {
+  font-size: 0.75rem;
+  color: #e5e5f7;
+  margin: 2px 0 0 0;
+}
+
+.spiny-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.spiny-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Área de mensajes */
+.spiny-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+}
+
+.spiny-msg {
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  max-width: 85%;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.spiny-msg.user {
+  background-color: rgb(67, 67, 176);
+  color: #ffffff!important;
+  margin-left: auto;
+  border-bottom-right-radius: 0.25rem;
+}
+.spiny-msg.user p,
+.spiny-msg.user span {
+  color: #ffffff !important;
+}
+
+.spiny-msg.spiny {
+  background-color: #ffffff;
+  border: 1px solid #e5e5f7;
+  color: #1e293b;
+  margin-right: auto;
+  border-bottom-left-radius: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.spiny-msg.loading {
+  color: #5a5ac8;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Nota inferior */
+.spiny-footer-note {
+  padding: 0.5rem 1rem;
+  background-color: #f3f3fb;
+  border-top: 1px solid #e5e5f7;
+  font-size: 0.75rem;
+  color: #475569;
+  text-align: center;
+}
+
+/* Formulario de entrada */
+.spiny-form {
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5f7;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.spiny-input {
+  flex: 1;
+  background-color: #f8fafc;
+  border: 1px solid #e5e5f7;
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  color: #1e293b;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.spiny-input:focus {
+  border-color: rgb(67, 67, 176);
+  box-shadow: 0 0 0 3px rgba(90, 90, 200, 0.15);
+}
+
+.spiny-input::placeholder {
+  color: #94a3b8;
+}
+
+.spiny-send-btn {
+  background-color: rgb(67, 67, 176);
+  color: #ffffff;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.spiny-send-btn:hover {
+  background-color: #3b3b9b;
+  transform: translateY(-1px);
+}
+
+/* Botón flotante tipo píldora inferior derecho */
+.spiny-toggle-btn {
+  background-color: rgb(67, 67, 176);
+  color: #ffffff;
+  padding: 0.5rem 1.25rem 0.5rem 0.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 1px solid #3b3b9b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.spiny-toggle-btn:hover {
+  background-color: #3b3b9b;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 20px -3px rgba(0, 0, 0, 0.2);
+}
+
+.spiny-toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* Imagen circular de Spiny en la píldora */
+.spiny-toggle-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Contenedor del punto indicador de estado */
+.spiny-status-dot-container {
+  position: relative;
+  display: flex;
+  height: 8px;
+  width: 8px;
+  margin-left: -0.25rem;
+}
+
+.spiny-status-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  position: absolute;
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  background-color: #34d399;
+  opacity: 0.75;
+}
+
+.spiny-status-core {
+  position: relative;
+  display: inline-flex;
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+  background-color: #10b981;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.spiny-toggle-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+}
+
+.spiny-toggle-icon {
+  color: #e5e5f7;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  margin-left: 0.25rem;
+}
+
+.spiny-toggle-btn:hover .spiny-toggle-icon {
+  transform: rotate(90deg);
+}
