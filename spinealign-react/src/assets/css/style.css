@@ -326,3 +326,155 @@
        align-items: center;
      }
    }
+   /* ==========================================
+      SpineAlign - Estilos Vista 404 (Página No Encontrada)
+      ========================================== */
+
+   .not-found-container {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     text-align: center;
+     min-height: 60vh;
+     padding: clamp(2rem, 5vw, 4rem) 1rem;
+   }
+
+   .not-found-code {
+     font-size: clamp(5rem, 15vw, 8rem);
+     font-weight: 800;
+     color: var(--medical-600);
+     line-height: 1;
+     margin: 0 0 1rem 0;
+     letter-spacing: -0.05em;
+   }
+
+   .not-found-title {
+     color: var(--medical-900);
+     font-size: clamp(1.5rem, 4vw, 2.25rem);
+     font-weight: 700;
+     margin: 0 0 1rem 0;
+   }
+
+   .not-found-text {
+     color: var(--slate-600);
+     font-size: 1.05rem;
+     max-width: 32rem;
+     margin: 0 auto 2rem auto;
+     line-height: 1.6;
+   }
+
+   .not-found-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     background-color: var(--medical-600);
+     color: #ffffff;
+     font-weight: 600;
+     font-size: 1rem;
+     padding: 0.75rem 1.75rem;
+     border-radius: 0.75rem;
+     text-decoration: none;
+     transition: background-color 0.2s ease, transform 0.1s ease;
+     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+   }
+  
+
+   .not-found-btn:hover {
+     background-color: var(--medical-700);
+     color: #ffffff;
+     transform: translateY(-1px);
+   }
+   /* ==========================================
+      SpineAlign - Estilos Vista 404 con Spiny
+      ========================================== */
+
+   .not-found-container {
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
+     gap: clamp(2rem, 5vw, 4rem);
+     min-height: 60vh;
+     padding: clamp(2rem, 5vw, 4rem) 1rem;
+     max-width: 65rem;
+     margin: 0 auto;
+   }
+
+   .not-found-content {
+     text-align: left;
+     flex: 1;
+   }
+
+   .not-found-image-container {
+     flex: 1;
+     display: flex;
+     justify-content: center;
+   }
+
+   .not-found-img {
+     max-width: 100%;
+     width: 280px;
+     height: auto;
+     object-fit: contain;
+   }
+
+   .not-found-code {
+     font-size: clamp(4rem, 10vw, 7rem);
+     font-weight: 800;
+     color: var(--medical-600);
+     line-height: 1;
+     margin: 0 0 0.5rem 0;
+     letter-spacing: -0.05em;
+   }
+
+   .not-found-title {
+     color: var(--medical-900);
+     font-size: clamp(1.5rem, 3vw, 2rem);
+     font-weight: 700;
+     margin: 0 0 1rem 0;
+   }
+
+   .not-found-text {
+     color: var(--slate-600);
+     font-size: 1.05rem;
+     margin: 0 0 1.5rem 0;
+     line-height: 1.6;
+   }
+
+   .not-found-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     background-color: var(--medical-600);
+     color: #ffffff;
+     font-weight: 600;
+     font-size: 1rem;
+     padding: 0.75rem 1.75rem;
+     border-radius: 0.75rem;
+     text-decoration: none;
+     transition: background-color 0.2s ease, transform 0.1s ease;
+     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+   }
+
+   .not-found-btn:hover {
+     background-color: var(--medical-700);
+     color: #ffffff;
+     transform: translateY(-1px);
+   }
+
+   /* Responsive: en celulares se apila verticalmente */
+   @media (max-width: 768px) {
+     .not-found-container {
+       flex-direction: column-reverse;
+       text-align: center;
+     }
+
+     .not-found-content {
+       text-align: center;
+     }
+
+     .not-found-img {
+       width: 200px;
+     }
+   }
