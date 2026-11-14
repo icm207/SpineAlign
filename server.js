@@ -9,9 +9,7 @@ const app = express();
 app.use(express.json({ limit: '10mb' })); // Permite recibir imágenes en Base64 de mayor tamaño
 app.use(cors());                          // Habilita la comunicación con el frontend
 
-// ==========================================
-// 1. ESQUEMA Y MODELO DE USUARIO
-// ==========================================
+/* 1. ESQUEMA Y MODELO DE USUARIO*/
 const evaluacionSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now },
     anguloBiacromial: { type: Number },
@@ -33,21 +31,17 @@ const usuarioSchema = new mongoose.Schema({
 
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 
-// ==========================================
-// 2. CONEXIÓN A MONGODB ATLAS
-// ==========================================
+/* 2. CONEXIÓN A MONGODB ATLAS*/
 mongoose.connect('mongodb+srv://hostinjmr2_db_user:MAGayy9nGy66eff7@cluster0.mbunrpc.mongodb.net/spinealign?retryWrites=true&w=majority')
     .then(() => console.log('Conectado exitosamente a MongoDB Atlas'))
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
-// Ruta de prueba inicial
+/* Ruta de prueba inicial*/
 app.get('/', (req, res) => {
     res.send('¡El servidor de SpineAlign está funcionando correctamente!');
 });
 
-// ==========================================
-// 3. RUTA DE REGISTRO (POST /api/registro)
-// ==========================================
+/* 3. RUTA DE REGISTRO (POST /api/registro)*/
 app.post('/api/registro', async (req, res) => {
     try {
         const { nombre, edad, correo, sexo, altura, peso, password } = req.body;
@@ -81,9 +75,7 @@ app.post('/api/registro', async (req, res) => {
     }
 });
 
-// ==========================================
-// 4. RUTA DE LOGIN (POST /api/login)
-// ==========================================
+/*4. RUTA DE LOGIN (POST /api/login)*/
 app.post('/api/login', async (req, res) => {
     try {
         const { correo, password } = req.body;
@@ -110,9 +102,9 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// ==========================================
-// 5. RUTA PARA GUARDAR EVALUACIÓN (POST /api/evaluacion)
-// ==========================================
+
+/*5. RUTA PARA GUARDAR EVALUACIÓN (POST /api/evaluacion)*/
+
 app.post('/api/evaluacion', async (req, res) => {
     try {
         const { correo, anguloBiacromial, indiceAsimetria, imagenUrl } = req.body;
@@ -140,9 +132,9 @@ app.post('/api/evaluacion', async (req, res) => {
     }
 });
 
-// ==========================================
-// 6. RUTA PARA OBTENER EL HISTORIAL (GET /api/historial/:correo)
-// ==========================================
+
+/* 6. RUTA PARA OBTENER EL HISTORIAL (GET /api/historial/:correo)*/
+
 app.get('/api/historial/:correo', async (req, res) => {
     try {
         const { correo } = req.params;
@@ -175,9 +167,9 @@ app.get('/api/historial/:correo', async (req, res) => {
     }
 });
 
-// ==========================================
-// 7. RUTA PARA OBTENER DATOS DE USUARIO (GET /api/usuario/:correo)
-// ==========================================
+
+/*7. RUTA PARA OBTENER DATOS DE USUARIO (GET /api/usuario/:correo)*/
+
 app.get('/api/usuario/:correo', async (req, res) => {
     try {
         const { correo } = req.params;
@@ -202,9 +194,8 @@ app.get('/api/usuario/:correo', async (req, res) => {
     }
 });
 
-// ==========================================
-// 8. RUTA PARA ACTUALIZAR EL PERFIL (PUT /api/usuario/:correo)
-// ==========================================
+/* 8. RUTA PARA ACTUALIZAR EL PERFIL (PUT /api/usuario/:correo)*/
+
 app.put('/api/usuario/:correo', async (req, res) => {
     try {
         const { correo } = req.params;
@@ -227,10 +218,41 @@ app.put('/api/usuario/:correo', async (req, res) => {
     }
 });
 
-// ==========================================
-// 9. INICIAR EL SERVIDOR
-// ==========================================
+ /*9. INICIAR EL SERVIDOR*/
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
+import express from "express";
+import dotenv from "dotenv";
+import { GoogleGenAI, Type } from "@google/genai";
+
+dotenv.config(); // Lee el archivo .env donde guardaste tu clave
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Conecta tu servidor con Google
+app.post("/api/analizar-postura", async (req, res) => {
+    const { hombroIzq, hombroDer, inclinacionGrados } = req.body;
+    const prompt = `
+    Analiza estos datos:
+    - Hombro Izquierdo: (${hombroIzq.x}, ${hombroIzq.y})
+    - Hombro Derecho: (${hombroDer.x}, ${hombroDer.y})
+    - Ángulo de desnivel: ${inclinacionGrados}°
+  `;
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview", // El modelo rápido de Google
+    contents: prompt, // La pregunta que armamos arriba
+    config: {
+      systemInstruction: "Eres un experto en biomecánica postural.", // Su "personalidad"
+      responseMimeType: "application/json", // Le prohíbe responder con texto suelto
+      responseSchema: {
+        // Aquí dibujas el "molde" exacto de cómo quieres la respuesta
+        type: Type.OBJECT,
+        properties: {
+          nivelAsimetria: { type: Type.STRING },
+          analisisBiomecanico: { type: Type.STRING },
+          ejerciciosRecomendados: { type: Type.ARRAY, items: { type: Type.STRING } }
+        }
+      }
+    }
+  });
+  res.json(JSON.parse(response.text));
 });
