@@ -96,9 +96,51 @@ export default function Home() {
         </section>
       </main>
 
-      <footer>
-        <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
-        <p className="copyright">Copyright ©️ 2026 SpineAlign - Todos los derechos reservados</p>
+      {/* Footer Formal y Contundente */}
+      <footer className="footer-spine">
+        <div className="footer-container">
+          
+          {/* Columna 1: Información del Proyecto */}
+          <div className="footer-col">
+            <h3>SpineAlign</h3>
+            <p>
+              Plataforma web avanzada para la evaluación postural y el análisis biomecánico. Desarrollado con rigor académico por estudiantes de <strong>Ingeniería Biomédica</strong>.
+            </p>
+          </div>
+
+          {/* Columna 2: Creadores y Contacto */}
+          <div className="footer-col">
+            <h4>Equipo de Desarrollo</h4>
+            <ul className="footer-creators-list">
+              <li>
+                <strong>Hostin Muñoz</strong>
+                <a href="mailto:hymunoz@uninorte.edu.co">hymunoz@uninorte.edu.co</a>
+              </li>
+              <li>
+                <strong>Isabella Calderón</strong>
+                <a href="mailto:icalderon@uninorte.edu.co">icalderon@uninorte.edu.co</a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Columna 3: Marco Legal & Aviso Médico */}
+          <div className="footer-col">
+            <h4>Marco Legal</h4>
+            <ul className="footer-links">
+             <li><a href="/marco-legal">Términos y Condiciones de Uso</a></li>
+              <li><a href="/marco-legal">Política de Privacidad y Datos</a></li>
+              <li><a href="/marco-legal">Aviso de Descargo Médico</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Barra inferior de Copyright */}
+        <div className="footer-bottom">
+          <p><strong>SpineAlign es una herramienta de apoyo.</strong> No sustituye el diagnóstico ni la valoración de un profesional de la salud.</p>
+          <p>© 2026 <strong>SpineAlign</strong>. Todos los derechos reservados.</p>
+          <p className="copyright">Innovación en Ingeniería Biomédica y Salud Postural.</p>
+        </div>
       </footer>
     </div>
   );

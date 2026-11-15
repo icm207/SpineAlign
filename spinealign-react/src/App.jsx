@@ -9,6 +9,7 @@ import Registro from './components/Registro';
 import MiCuenta from './components/MiCuenta';
 import SpinyChat from './components/SpinyChat';
 import NotFound from './components/NotFound'; // 1. Importa tu componente NotFound (ajusta la ruta si está en otra carpeta)
+import MarcoLegal from './components/MarcoLegal'; 
 
 export default function App() {
   return (
@@ -22,7 +23,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
           <Route path="/mi-cuenta" element={<MiCuenta />} />
-          
+          <Route path="/marco-legal" element={<MarcoLegal />} />
           {/* 2. Ruta comodín al FINAL de todas para atrapar errores 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
