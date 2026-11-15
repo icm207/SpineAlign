@@ -4,13 +4,37 @@ import '../assets/css/style.css';
 
 export default function Home() {
   const [estaLogueado, setEstaLogueado] = useState(false);
+  const [indiceActual, setIndiceActual] = useState(0);
+
+  // Lista con las 4 imágenes para el carrusel
+  const imagenesCarrusel = [
+    { src: "/src/assets/img/postura.png", alt: "Evaluación postural de espalda" },
+    { src: "/src/assets/img/postura2.png", alt: "Análisis de puntos anatómicos" },
+    { src: "/src/assets/img/postura3.png", alt: "Reporte clínico y métricas ASI" },
+    { src: "/src/assets/img/postura4.png", alt: "Visualización de resultados en plataforma" }
+  ];
 
   useEffect(() => {
     const sesionActiva = localStorage.getItem('token');
     if (sesionActiva) {
       setEstaLogueado(true);
     }
-  }, []);
+
+    // Rotación automática cada 4 segundos
+    const intervalo = setInterval(() => {
+      setIndiceActual((prevIndex) => (prevIndex + 1) % imagenesCarrusel.length);
+    }, 4000);
+
+    return () => clearInterval(intervalo);
+  }, [imagenesCarrusel.length]);
+
+  const irALterior = () => {
+    setIndiceActual((prevIndex) => (prevIndex === 0 ? imagenesCarrusel.length - 1 : prevIndex - 1));
+  };
+
+  const irASiguiente = () => {
+    setIndiceActual((prevIndex) => (prevIndex + 1) % imagenesCarrusel.length);
+  };
 
   const handleContactoSubmit = (e) => {
     e.preventDefault();
@@ -46,9 +70,35 @@ export default function Home() {
           <p> 
             A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), SpineAlign permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales.
           </p>
-          <figure>
-            <img src="/src/assets/img/postura.png" alt="Persona posando de espaldas" className="centrada" />
-          </figure>
+          
+          {/* Carrusel de 4 Imágenes Rotativo */}
+          <div className="carrusel-container">
+            <button className="carrusel-btn carrusel-btn-prev" onClick={irALterior}>❮</button>
+            
+            <div 
+              className="carrusel-track" 
+              style={{ transform: `translateX(-${indiceActual * 100}%)` }}
+            >
+              {imagenesCarrusel.map((img, index) => (
+                <div className="carrusel-slide" key={index}>
+                  <img src={img.src} alt={img.alt} className="carrusel-img" />
+                </div>
+              ))}
+            </div>
+
+            <button className="carrusel-btn carrusel-btn-next" onClick={irASiguiente}>❯</button>
+
+            {/* Puntos indicadores */}
+            <div className="carrusel-dots">
+              {imagenesCarrusel.map((_, index) => (
+                <button 
+                  key={index} 
+                  className={`carrusel-dot ${indiceActual === index ? 'active' : ''}`}
+                  onClick={() => setIndiceActual(index)}
+                />
+              ))}
+            </div>
+          </div>
         </section>
 
         <section id="como-funciona" className="spine-funcionamiento">
