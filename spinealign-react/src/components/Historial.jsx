@@ -153,7 +153,7 @@ export default function Historial() {
     <div className="spine-historial-container">
       <header className="barra-navegacion">
         <a href="/">
-          <img src="/src/assets/img/iotipo-.png" alt="Logotipo oficial de SpineAlign" className="logo" />
+          <img src="/iotipo-.png" alt="Logotipo oficial de SpineAlign" className="logo" />
         </a>
         <nav className="menu-derecha" aria-label="Menú principal de navegación">
           <a href="/">Inicio</a>

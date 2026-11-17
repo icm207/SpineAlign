@@ -8,10 +8,10 @@ export default function Home() {
 
   // Lista con las 4 imágenes para el carrusel
   const imagenesCarrusel = [
-    { src: "/src/assets/img/postura.png", alt: "Evaluación postural de espalda" },
-    { src: "/src/assets/img/postura2.png", alt: "Análisis de puntos anatómicos" },
-    { src: "/src/assets/img/postura3.png", alt: "Reporte clínico y métricas ASI" },
-    { src: "/src/assets/img/postura4.png", alt: "Visualización de resultados en plataforma" }
+    { src: "/postura.png", alt: "Evaluación postural de espalda" },
+    { src: "/postura2.png", alt: "Análisis de puntos anatómicos" },
+    { src: "/postura3.png", alt: "Reporte clínico y métricas ASI" },
+    { src: "/postura4.png", alt: "Visualización de resultados en plataforma" }
   ];
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function Home() {
     <div className="spine-home-container">
       <header className="barra-navegacion">
         <a href="/">
-          <img src="/src/assets/img/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
+          <img src="/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
         </a>
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/" className="mensaje-bienvenida">Bienvenido a SpineAlign</a>
@@ -69,7 +69,7 @@ export default function Home() {
           </p>
           <p> 
             A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), SpineAlign permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales.
-          </p>
+          </p>img
           
           {/* Carrusel de 4 Imágenes Rotativo */}
           <div className="carrusel-container">

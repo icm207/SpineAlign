@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import spiny404Image from '../assets/img/spiny404.png'; // Ajusta esta ruta según la ubicación real de tu imagen
+import spiny404Image from '/spiny404.png'; // Ajusta esta ruta según la ubicación real de tu imagen
 
 export default function NotFound() {
   return (

@@ -8,7 +8,7 @@ export default function MarcoLegal() {
       {/* Barra de navegación */}
       <header className="barra-navegacion">
         <a href="/">
-          <img src="/src/assets/img/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
+          <img src="/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
         </a>
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/" className="mensaje-bienvenida">Bienvenido a SpineAlign</a>

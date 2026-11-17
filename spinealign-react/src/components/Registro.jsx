@@ -54,7 +54,7 @@ export default function Registro() {
     <div className="spine-registro-page">
       <header className="barra-navegacion">
         <a href="/">
-          <img src="/src/assets/img/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
+          <img src="/iotipo-.png" alt="Isotipo SpineAlign" className="logo" />
         </a>
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/">Inicio</a>

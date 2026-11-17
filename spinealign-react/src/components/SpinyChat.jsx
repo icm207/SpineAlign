@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../assets/css/SpinyChat.css';
-import spinyImg from '../assets/img/spiny.png';
+import spinyImg from '/spiny.png';
 
 export default function SpinyChat() {
   const [isOpen, setIsOpen] = useState(false);
