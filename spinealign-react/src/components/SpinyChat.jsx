@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../assets/css/SpinyChat.css';
 import spinyImg from '../assets/img/spiny.png';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
 export default function SpinyChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -15,53 +13,49 @@ export default function SpinyChat() {
     setMessages([
       { sender: 'spiny', text: '¡Hola! Bienvenido a SpineAlign. ¿En qué te puedo ayudar hoy con tu evaluación postural o conceptos anatómicos?' }
     ]);
-    setHistory([
-      {
-        role: "user",
-        parts: [{ text: "Eres Spiny, el asistente virtual de SpineAlign, una plataforma interactiva de evaluación postural (mide el ángulo biacromial y el índice de asimetría postural). Explica conceptos anatómicos clave (C7, acromion, manubrio) y guía al usuario de forma clara, amigable y concisa." }]
-      },
-      {
-        role: "model",
-        parts: [{ text: "¡Entendido! Soy Spiny, listo para ayudar con la postura y la anatomía en SpineAlign." }]
-      }
-    ]);
+    setHistory([]);
   }, []);
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
     const userMessage = input;
     setMessages(prev => [...prev, { sender: 'user', text: userMessage }]);
     setInput('');
     setLoading(true);
 
-    const newHistory = [...history, { role: "user", parts: [{ text: userMessage }] }];
-
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: newHistory })
-        }
-      );
+      const response = await fetch('http://localhost:3000/api/chat-spiny', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mensaje: userMessage,
+          historial: history
+        })
+      });
 
       const data = await response.json();
 
-      if (data.error) {
-        throw new Error(data.error.message || "Error en la API de Gemini");
+      if (!response.ok || data.error) {
+        throw new Error(data.error || 'Error en el servidor de SpineAlign');
       }
 
-      const botReply = data.candidates[0].content.parts[0].text;
+      const botReply = data.respuesta;
 
       setMessages(prev => [...prev, { sender: 'spiny', text: botReply }]);
-      setHistory([...newHistory, { role: "model", parts: [{ text: botReply }] }]);
+      setHistory(prev => [
+        ...prev,
+        { role: 'user', parts: [{ text: userMessage }] },
+        { role: 'model', parts: [{ text: botReply }] }
+      ]);
 
     } catch (err) {
-      console.error("Error al conectar con Gemini:", err);
-      setMessages(prev => [...prev, { sender: 'spiny', text: 'Ups, tuve un problema de conexión con la IA. Revisa tu API Key en el archivo .env.' }]);
+      console.error('Error al conectar con Spiny:', err);
+      setMessages(prev => [
+        ...prev,
+        { sender: 'spiny', text: 'Ups, tuve un problema de conexión con el servidor. Verifica que el backend esté encendido.' }
+      ]);
     } finally {
       setLoading(false);
     }
@@ -105,11 +99,12 @@ export default function SpinyChat() {
             <input 
               type="text" 
               value={input} 
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)} 
               placeholder="¿Qué te gustaría saber?" 
               className="spiny-input"
+              disabled={loading}
             />
-            <button type="submit" className="spiny-send-btn" title="Enviar mensaje">
+            <button type="submit" className="spiny-send-btn" title="Enviar mensaje" disabled={loading}>
               ↑
             </button>
           </form>
