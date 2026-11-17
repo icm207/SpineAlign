@@ -35,7 +35,7 @@ const usuarioSchema = new mongoose.Schema({
 const Usuario = mongoose.model('Usuario', usuarioSchema);
 
 /* 2. CONEXIÓN A MONGODB ATLAS */
-mongoose.connect('mongodb+srv://hostinjmr2_db_user:MAGayy9nGy66eff7@cluster0.mbunrpc.mongodb.net/spinealign?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Conectado exitosamente a MongoDB Atlas'))
     .catch(err => console.error('Error al conectar a MongoDB:', err));
 
@@ -306,7 +306,7 @@ app.post('/api/chat-spiny', async (req, res) => {
     }
 });
 /* 10. INICIAR EL SERVIDOR */
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
