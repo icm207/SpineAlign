@@ -7,23 +7,23 @@ export default function Evaluar() {
   const [streamCamara, setStreamCamara] = useState(null);
   const [imagenCargada, setImagenCargada] = useState(false);
   const [urlImagenCapturada, setUrlImagenCapturada] = useState('');
- 
+
   const videoWebcamRef = useRef(null);
   const imagenAnalisisRef = useRef(null);
   const placeholderVisorRef = useRef(null);
   const contenedorVisorRef = useRef(null);
- 
+
   const puntoC7Ref = useRef(null);
   const puntoManubrioRef = useRef(null);
   const puntoLARef = useRef(null);
   const puntoRARef = useRef(null);
   const svgConexionRef = useRef(null);
- 
+
   const lineaHombrosRef = useRef(null);
   const lineaEjeVerticalRef = useRef(null);
   const refVerticalIdealRef = useRef(null);
   const refHorizontalIdealRef = useRef(null);
- 
+
   const btnPdfRef = useRef(null);
 
   const [grupoInicialDisplay, setGrupoInicialDisplay] = useState('flex');
@@ -45,9 +45,9 @@ export default function Evaluar() {
   const handlePdfClick = async () => {
     const sesionActiva = localStorage.getItem('token');
     let correoUsuario = localStorage.getItem('correo') ||
-                          localStorage.getItem('email') ||
-                          localStorage.getItem('usuarioCorreo') ||
-                          localStorage.getItem('userEmail');
+      localStorage.getItem('email') ||
+      localStorage.getItem('usuarioCorreo') ||
+      localStorage.getItem('userEmail');
 
     if (!sesionActiva || !correoUsuario) {
       alert("Debe iniciar sesión para generar y descargar el reporte clínico en PDF.");
@@ -65,7 +65,7 @@ export default function Evaluar() {
     };
 
     try {
-      const res = await fetch(`http://localhost:3000/api/usuario/${correoUsuario.trim()}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/usuario/${correoUsuario.trim()}`);
       if (res.ok) {
         const dataUser = await res.json();
         datosPaciente = {
@@ -181,9 +181,9 @@ export default function Evaluar() {
     const sesionActiva = localStorage.getItem('token');
 
     let correoUsuario = localStorage.getItem('correo') ||
-                          localStorage.getItem('email') ||
-                          localStorage.getItem('usuarioCorreo') ||
-                          localStorage.getItem('userEmail');
+      localStorage.getItem('email') ||
+      localStorage.getItem('usuarioCorreo') ||
+      localStorage.getItem('userEmail');
 
     if (!correoUsuario && sesionActiva && sesionActiva.includes('.')) {
       try {
@@ -216,7 +216,7 @@ export default function Evaluar() {
         imagenFinalUrl = canvasCaptura.toDataURL('image/png');
       }
 
-      const response = await fetch('http://localhost:3000/api/evaluacion', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/evaluacion`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -311,7 +311,7 @@ export default function Evaluar() {
     }
 
     const lector = new FileReader();
-    lector.onload = function(event) {
+    lector.onload = function (event) {
       const dataUrl = event.target.result;
       setUrlImagenCapturada(dataUrl);
 
@@ -543,7 +543,7 @@ export default function Evaluar() {
           <div className="tarjeta-modulo">
             <h2>Nueva Evaluación</h2>
             <p className="subtitulo-seccion">Usa la cámara o sube una foto, luego arrastra libremente C7, el Manubrium y los hombros.</p>
-           
+
             <div className="controles-fuente" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div id="grupo-botones-inicial" style={{ display: grupoInicialDisplay, gap: '0.5rem' }}>
                 <button type="button" onClick={activarCamara} className="btn-cargar-foto" style={{ flex: 1 }}>

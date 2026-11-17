@@ -26,7 +26,7 @@ export default function SpinyChat() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/chat-spiny', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/chat-spiny`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -77,7 +77,7 @@ export default function SpinyChat() {
               ✕
             </button>
           </div>
-          
+
           <div className="spiny-messages">
             {messages.map((m, idx) => (
               <div key={idx} className={`spiny-msg ${m.sender}`}>
@@ -96,11 +96,11 @@ export default function SpinyChat() {
           </div>
 
           <form onSubmit={sendMessage} className="spiny-form">
-            <input 
-              type="text" 
-              value={input} 
-              onChange={(e) => setInput(e.target.value)} 
-              placeholder="¿Qué te gustaría saber?" 
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="¿Qué te gustaría saber?"
               className="spiny-input"
               disabled={loading}
             />

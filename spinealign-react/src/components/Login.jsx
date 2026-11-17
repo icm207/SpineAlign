@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       // Petición real a tu server.js en el puerto 3000
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default function Login() {
         // Guardamos el token y el correo reales devueltos por MongoDB
         localStorage.setItem('token', data.token);
         localStorage.setItem('correo', data.correo);
-        
+
         alert(`¡Bienvenido de nuevo, ${data.nombre}!`);
         window.location.href = '/evaluar';
       } else {
@@ -59,25 +59,25 @@ export default function Login() {
         <div className="contenedor-login" style={{ width: '100%', maxWidth: '420px' }}>
           <h2>Iniciar Sesión</h2>
           <p>Accede a tu cuenta profesional de SpineAlign</p>
-          
+
           <form className="formulario-login" onSubmit={handleSubmit}>
             <div className="campo-formulario">
-              <input 
-                type="email" 
-                placeholder="medico@spinealign.com" 
+              <input
+                type="email"
+                placeholder="medico@spinealign.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
               />
             </div>
 
             <div className="campo-formulario">
-              <input 
-                type="password" 
-                placeholder="••••••••" 
+              <input
+                type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
               />
             </div>
 

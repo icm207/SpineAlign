@@ -16,7 +16,7 @@ export default function Registro() {
     if (nombre && email && edad && sexo && altura && peso && password) {
       try {
         // Hacemos la petición real al servidor backend en el puerto 3000
-        const response = await fetch('http://localhost:3000/api/registro', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/registro`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export default function Registro() {
         </a>
         <nav className="menu-derecha" aria-label="Principal">
           <a href="/">Inicio</a>
-          <a href="/login" className="boton-login" style={{backgroundColor: '#fff', color: 'rgb(67, 67, 176)', padding: '0.6rem 1.25rem', borderRadius: '0.75rem', fontWeight: 700}}>Iniciar sesión</a>
+          <a href="/login" className="boton-login" style={{ backgroundColor: '#fff', color: 'rgb(67, 67, 176)', padding: '0.6rem 1.25rem', borderRadius: '0.75rem', fontWeight: 700 }}>Iniciar sesión</a>
         </nav>
       </header>
 
@@ -66,7 +66,7 @@ export default function Registro() {
         <div className="contenedor-login" style={{ width: '100%', maxWidth: '440px' }}>
           <h2>Crear Cuenta</h2>
           <p>Regístrate para gestionar evaluaciones y reportes clínicos</p>
-          
+
           <form className="formulario-login" onSubmit={handleSubmit}>
             <div className="campo-formulario">
               <input type="text" placeholder="Nombre completo" value={nombre} onChange={e => setNombre(e.target.value)} required />

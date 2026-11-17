@@ -20,7 +20,7 @@ export default function Historial() {
     }
 
     if (correoUsuario) {
-      fetch(`http://localhost:3000/api/historial/${correoUsuario.trim()}`)
+      fetch(`${import.meta.env.VITE_API_URL}/api/historial/${correoUsuario.trim()}`)
         .then(res => res.json())
         .then(data => {
           if (Array.isArray(data)) {
