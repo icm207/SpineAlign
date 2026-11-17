@@ -36,13 +36,6 @@ export default function Home() {
     setIndiceActual((prevIndex) => (prevIndex + 1) % imagenesCarrusel.length);
   };
 
-  const handleContactoSubmit = (e) => {
-    e.preventDefault();
-    const nombre = document.getElementById('nombre-contacto').value;
-    alert(`¡Gracias por contactarnos, ${nombre}! Tu mensaje ha sido enviado correctamente.`);
-    e.target.reset();
-  };
-
   return (
     <div className="spine-home-container">
       <header className="barra-navegacion">
@@ -67,16 +60,16 @@ export default function Home() {
           <p>
             Bienvenido a SpineAlign. SpineAlign es un sitio web interactivo e iniciativa biomédica enfocada en la salud y la prevención postural de manera accesible e intuitiva. Mediante la integración de la cámara del dispositivo, la plataforma aplica un método de evaluación postural basado en fotogrametría computarizada, analizando puntos anatómicos clave en tiempo real.
           </p>
-          <p> 
+          <p>
             A través del cálculo de métricas objetivas como el Ángulo Bi-Acromial y el Índice de Asimetría Postural (ASI), SpineAlign permite a las personas identificar de forma oportuna si presentan desniveles o malos hábitos posturales.
-          </p>img
-          
+          </p>
+
           {/* Carrusel de 4 Imágenes Rotativo */}
           <div className="carrusel-container">
             <button className="carrusel-btn carrusel-btn-prev" onClick={irALterior}>❮</button>
-            
-            <div 
-              className="carrusel-track" 
+
+            <div
+              className="carrusel-track"
               style={{ transform: `translateX(-${indiceActual * 100}%)` }}
             >
               {imagenesCarrusel.map((img, index) => (
@@ -91,8 +84,8 @@ export default function Home() {
             {/* Puntos indicadores */}
             <div className="carrusel-dots">
               {imagenesCarrusel.map((_, index) => (
-                <button 
-                  key={index} 
+                <button
+                  key={index}
                   className={`carrusel-dot ${indiceActual === index ? 'active' : ''}`}
                   onClick={() => setIndiceActual(index)}
                 />
@@ -125,31 +118,61 @@ export default function Home() {
           </ol>
         </section>
 
-        <section id="contacto" className="contenedor" style={{ textAlign: 'center' }}>
-          <h2>Contacto</h2>
-          <p>¿Tienes dudas o deseas colaborar con nosotros? Escríbenos tu nombre, correo y mensaje para más información acerca de nuestros módulos de fotogrametría.</p>
-          <form id="form-contacto" className="form-contacto-box" onSubmit={handleContactoSubmit}>
-            <div className="grupo-form-contacto">
-              <label htmlFor="nombre-contacto">Nombre</label>
-              <input type="text" id="nombre-contacto" placeholder="Tu nombre completo" required />
-            </div>
-            <div className="grupo-form-contacto">
-              <label htmlFor="email-contacto">Correo Electrónico</label>
-              <input type="email" id="email-contacto" placeholder="tucorreo@ejemplo.com" required />
-            </div>
-            <div className="grupo-form-contacto">
-              <label htmlFor="mensaje-contacto">Duda o Petición</label>
-              <textarea id="mensaje-contacto" placeholder="Escribe aquí tu mensaje o solicitud..." required></textarea>
-            </div>
-            <button type="submit" className="btn-enviar-form">Enviar Mensaje</button>
-          </form>
+        {/* Preguntas frecuentes + Spiny (reemplaza el formulario de contacto) */}
+        <section id="ayuda" className="ayuda-section">
+          <h2>Preguntas frecuentes</h2>
+
+          <div className="faq-lista">
+            <article className="faq-item">
+              <h3 className="faq-pregunta">¿Qué es el ángulo Bi-Acromial?</h3>
+              <p>
+                Mide la alineación horizontal de tus hombros usando como referencia los
+                puntos acromiales izquierdo y derecho. Un valor equilibrado indica
+                simetría en la cintura escapular.
+              </p>
+            </article>
+
+            <article className="faq-item">
+              <h3 className="faq-pregunta">¿Qué es el índice de asimetría (ASI)?</h3>
+              <p>
+                Indica qué tanto desnivel hay entre tu hombro izquierdo y el derecho.
+                Mientras más cercano a cero, más simétrica es tu postura.
+              </p>
+            </article>
+
+            <article className="faq-item">
+              <h3 className="faq-pregunta">¿Cómo debo tomar la fotografía?</h3>
+              <p>
+                Ubícate de espaldas, con buena iluminación y con los hombros y el cuello
+                visibles. Evita ropa muy holgada para que los puntos C7, Manubrium y
+                acromios se marquen mejor.
+              </p>
+            </article>
+
+            <article className="faq-item">
+              <h3 className="faq-pregunta">¿SpineAlign reemplaza a un profesional de la salud?</h3>
+              <p>
+                No. Es una herramienta de apoyo para observar tu postura. Si notas
+                dolor o una asimetría marcada, consulta a un especialista.
+              </p>
+            </article>
+          </div>
+
+          <div className="spiny-banner">
+            <h3>¿Más dudas? Pregúntale a Spiny</h3>
+            <p>
+              Nuestro asistente virtual puede explicarte qué es la vértebra C7, el
+              acromion, el manubrio y cómo interpretar tus resultados. Ábrelo en el
+              botón de chat de la esquina inferior derecha.
+            </p>
+          </div>
         </section>
       </main>
 
       {/* Footer Formal y Contundente */}
       <footer className="footer-spine">
         <div className="footer-container">
-          
+
           {/* Columna 1: Información del Proyecto */}
           <div className="footer-col">
             <h3>SpineAlign</h3>
@@ -177,7 +200,7 @@ export default function Home() {
           <div className="footer-col">
             <h4>Marco Legal</h4>
             <ul className="footer-links">
-             <li><a href="/marco-legal">Términos y Condiciones de Uso</a></li>
+              <li><a href="/marco-legal">Términos y Condiciones de Uso</a></li>
               <li><a href="/marco-legal">Política de Privacidad y Datos</a></li>
               <li><a href="/marco-legal">Aviso de Descargo Médico</a></li>
             </ul>
