@@ -93,11 +93,11 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ error: 'Correo o contraseña incorrectos.' });
         }
 
-        res.json({ 
-            mensaje: 'Login exitoso', 
+        res.json({
+            mensaje: 'Login exitoso',
             token: 'jwt-token-valido-spinealign-2026',
             correo: usuario.correo,
-            nombre: usuario.nombre 
+            nombre: usuario.nombre
         });
     } catch (error) {
         console.error(error);
@@ -218,30 +218,93 @@ app.put('/api/usuario/:correo', async (req, res) => {
 app.post('/api/chat-spiny', async (req, res) => {
     try {
         const { mensaje, historial } = req.body;
+        const textoUsuario = (mensaje || "").toLowerCase().trim();
 
-        const chat = ai.chats.create({
-            model: 'gemini-3-flash-preview',
-            config: {
-                systemInstruction: `
-                    Eres Spiny, el asistente virtual amigable de la plataforma web SpineAlign. 
-                    Tu objetivo es ayudar a los usuarios con dudas sobre higiene postural, ergonomía en el escritorio, 
-                    estiramientos básicos y cómo usar la aplicación SpineAlign para evaluar la alineación de sus hombros.
-                    Reglas:
-                    - Responde de manera cercana, clara y concisa (máximo 2 o 3 párrafos cortos).
-                    - Nunca des diagnósticos médicos definitivos; recuerda siempre consultar a un fisioterapeuta o médico si hay dolor agudo.
-                `
-            },
-            history: historial || []
-        });
+        // Banco de respuestas directas y específicas según lo que pregunte el usuario
+        const bancoDirecto = {
+            saludo: "¡Hola! Bienvenido a SpineAlign. ¿En qué te gustaría que te ayudemos hoy con tu evaluación postural?",
+            
+            c7: "La vértebra C7 (o vértebra prominente) es la séptima vértebra cervical y se caracteriza por tener una apófisis espinosa muy perceptible en la base del cuello. En SpineAlign, C7 es el punto de referencia anatómico superior fundamental para alinear la postura y calcular las desviaciones de los hombros en relación con la vertical.",
+            
+            manubrio: "El manubrio esternal es la porción superior y más ancha del esternón, situada en la parte anterior del tórax. Sirve como punto de anclaje para las clavículas y los primeros cartílagos costales, y en evaluaciones biomecánicas ayuda a estimar la simetría del tronco y la posición frontal del tórax.",
+            
+            acromion: "El acromion es la apófisis ósea que se encuentra en el extremo lateral de la espina de la escápula (omóplato). Es el punto clave utilizado en SpineAlign para marcar el borde externo de los hombros, permitiendo medir con precisión el ángulo biacromial y detectar desniveles escapulares.",
+            
+            indiceBiacromial: "El ángulo o índice biacromial evalúa la alineación horizontal de los hombros tomando como referencia los puntos acromiales izquierdo y derecho frente a la vertical de la columna (marcada por C7). Un valor equilibrado indica simetría en la cintura escapular, mientras que alteraciones señalan posibles desequilibrios musculares.",
+            
+            indiceAsimetria: "El Índice de Asimetría Postural (ASI) mide el grado de desnivel o diferencia de altura entre el hombro izquierdo y el derecho. Un ASI cercano a cero refleja una simetría ideal, mientras que un porcentaje elevado indica que un hombro está más elevado o adelantado, frecuentemente debido a malas posturas o tensiones en el trapecio.",
+            
+            ejerciciosPostura: "Para mejorar la postura y equilibrar los hombros, se recomiendan estiramientos de pectoral para abrir el pecho, ejercicios de fortalecimiento para los romboides y trapecio medio (como remos controlados), y rutinas de movilidad torácica. Si tienes una asimetría marcada, los ejercicios unilaterales enfocados en el lado más débil son de gran ayuda.",
+            
+            resultadosGenerales: "Para interpretar tus resultados en SpineAlign, verifica que tus valores de ángulo biacromial y ASI se mantengan estables. Si hay alguna asimetría moderada, asegúrate de corregir tu ergonomía al sentarte (pantalla a la altura de los ojos y soporte lumbar) y repite la evaluación en un par de semanas para medir tu progreso."
+        };
 
-        const response = await chat.sendMessage({ message: mensaje });
-        res.json({ respuesta: response.text });
+        let respuestaTexto = null;
+
+        // Detección directa y estricta de la intención del usuario
+        if (textoUsuario.match(/^(hola|buenos días|buenas tardes|buenas|que tal|hey)/)) {
+            respuestaTexto = bancoDirecto.saludo;
+        } else if (textoUsuario.includes('c7') || textoUsuario.includes('vértebra c7') || textoUsuario.includes('vertebra c7')) {
+            respuestaTexto = bancoDirecto.c7;
+        } else if (textoUsuario.includes('manubrio')) {
+            respuestaTexto = bancoDirecto.manubrio;
+        } else if (textoUsuario.includes('acromion')) {
+            respuestaTexto = bancoDirecto.acromion;
+        } else if (textoUsuario.includes('asi') || textoUsuario.includes('asimetría') || textoUsuario.includes('asimetria')) {
+            respuestaTexto = bancoDirecto.indiceAsimetria;
+        } else if (textoUsuario.includes('biacromial')) {
+            respuestaTexto = bancoDirecto.indiceBiacromial;
+        } else if (textoUsuario.includes('ejercicio') || textoUsuario.includes('rutina') || textoUsuario.includes('recomiendas')) {
+            respuestaTexto = bancoDirecto.ejerciciosPostura;
+        } else if (textoUsuario.includes('resultado') || textoUsuario.includes('mis datos') || textoUsuario.includes('evaluacion')) {
+            respuestaTexto = bancoDirecto.resultadosGenerales;
+        } else {
+            // Si pregunta otra cosa, intentamos con la API de Gemini (con límite de 6 segundos)
+            const instruccionSistema = `
+                Eres Spiny, el asistente virtual de SpineAlign. 
+                Responde de forma directa, concisa y estrictamente relacionada a lo que el usuario pregunte. 
+                Si te saludan, saluda cordialmente. Si preguntan por anatomía (C7, acromion, manubrio), explícalo directamente. 
+                Nunca des diagnósticos médicos definitivos.
+            `;
+
+            const modelosPosibles = ['gemini-3.8-flash', 'gemini-3.8-flash-lite', 'gemini-2.5-flash'];
+
+            for (const modelo of modelosPosibles) {
+                try {
+                    const promesaGemini = (async () => {
+                        const chat = ai.chats.create({
+                            model: modelo,
+                            config: { systemInstruction: instruccionSistema },
+                            history: historial || []
+                        });
+                        const response = await chat.sendMessage({ message: mensaje });
+                        return response ? response.text : null;
+                    })();
+
+                    const timeout = new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout Gemini')), 6000)
+                    );
+
+                    respuestaTexto = await Promise.race([promesaGemini, timeout]);
+                    if (respuestaTexto) break;
+                } catch (error) {
+                    console.warn(`Modelo ${modelo} ocupado, probando siguiente...`);
+                }
+            }
+        }
+
+        // Si la API no respondió a tiempo, damos una respuesta neutral orientada al tema
+        if (!respuestaTexto) {
+            respuestaTexto = "Entiendo tu consulta sobre biomecánica en SpineAlign. Para darte una respuesta más precisa, ¿te refieres a una estructura específica como la vértebra C7, el acromion o prefieres que revisemos tus métricas de asimetría?";
+        }
+
+        return res.json({ respuesta: respuestaTexto });
+
     } catch (error) {
-        console.error('Error en Spiny:', error);
-        res.status(500).json({ error: 'Spiny tuvo un problema al responder.' });
+        console.error('Error general en Spiny:', error);
+        res.json({ respuesta: "Hola, soy Spiny. ¿En qué te puedo colaborar con tu evaluación postural en SpineAlign?" });
     }
 });
-
 /* 10. INICIAR EL SERVIDOR */
 const PORT = 3000;
 app.listen(PORT, () => {

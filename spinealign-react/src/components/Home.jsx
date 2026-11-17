@@ -164,11 +164,11 @@ export default function Home() {
             <ul className="footer-creators-list">
               <li>
                 <strong>Hostin Muñoz</strong>
-                <a href="mailto:hymunoz@uninorte.edu.co">hymunoz@uninorte.edu.co</a>
+                <a href="mailto:hostinm@uninorte.edu.co">hostinm@uninorte.edu.co</a>
               </li>
               <li>
                 <strong>Isabella Calderón</strong>
-                <a href="mailto:icalderon@uninorte.edu.co">icalderon@uninorte.edu.co</a>
+                <a href="mailto:calderonisabella@uninorte.edu.co">calderonisabella@uninorte.edu.co</a>
               </li>
             </ul>
           </div>
